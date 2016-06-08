@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DietPedia</string>
+    <string name="about">About</string>
+    <string name="settings">Settings</string>
+    <string name="categories">Categories</string>
+    <string name="category1">Diet 1</string>
+    <string name="category2">Diet 2</string>
+    <string name="category3">Diet 3</string>
+    <string name="category4">Diet 4</string>
+</resources>

@@ -1,0 +1,28 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextSecondary</item>
+        <item name="colorControlNormal">@color/colorTextIcons</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="AppTheme">
+        <item name="android:textColor">@color/colorTextIcons</item>
+        <item name="android:textColorSecondary">@color/colorTextIcons</item>
+        <item name="actionMenuTextColor">@color/colorTextIcons</item>
+        <item name="colorControlNormal">@color/colorTextIcons</item>
+        <item name="titleTextColor">@color/colorTextIcons</item>
+    </style>
+
+    <style name="Custom" parent="android:Theme.DeviceDefault.Light.Dialog">
+        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
+        <item name="DialogTitleText">Yükleniyor…</item>
+        <item name="DialogSpotColor">@color/colorAccent</item>
+        <item name="DialogSpotCount">5</item>
+    </style>
+
+</resources>
