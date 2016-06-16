@@ -18,11 +18,4 @@
         <item name="titleTextColor">@color/colorTextIcons</item>
     </style>
 
-    <style name="Custom" parent="android:Theme.DeviceDefault.Light.Dialog">
-        <item name="DialogTitleAppearance">@android:style/TextAppearance.Medium</item>
-        <item name="DialogTitleText">Yükleniyor…</item>
-        <item name="DialogSpotColor">@color/colorAccent</item>
-        <item name="DialogSpotCount">5</item>
-    </style>
-
 </resources>
