@@ -5,8 +5,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.dietpedia.app.R;
+import com.dietpedia.app.ui.fragments.MainFragment;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements MainFragment.Listener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +29,15 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onListClicked(long id) {
+
+    }
+
+    @Override
+    public void onNewListClicked() {
+
     }
 }
