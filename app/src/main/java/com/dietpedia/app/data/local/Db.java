@@ -9,7 +9,28 @@ import com.dietpedia.app.domain.model.Category;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class Db {
-    public Db() { }
+    public static final int BOOLEAN_FALSE = 0;
+    public static final int BOOLEAN_TRUE = 1;
+
+    private Db() {
+        throw new AssertionError("No instances.");
+    }
+
+    public static String getString(Cursor cursor, String columnName) {
+        return cursor.getString(cursor.getColumnIndexOrThrow(columnName));
+    }
+
+    public static boolean getBoolean(Cursor cursor, String columnName) {
+        return getInt(cursor, columnName) == BOOLEAN_TRUE;
+    }
+
+    public static int getInt(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndexOrThrow(columnName));
+    }
+
+    public static long getLong(Cursor cursor, String columnName) {
+        return cursor.getLong(cursor.getColumnIndexOrThrow(columnName));
+    }
 
     public static abstract class DietTable {
         public static final String TABLE_NAME = "diet";
@@ -44,18 +65,6 @@ public class Db {
                 COLUMN_SNACK6 + " TEXT NOT NULL," +
                 " ); ";
 
-        public static ContentValues toContentValues(Category category) {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_NAME, category.name);
-            return values;
-        }
-
-        public static Category parseCursor(Cursor cursor) {
-            Category person = new Category();
-            person.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
-            return person;
-        }
-
         public static void onUpdate(SQLiteDatabase db) {
             db.execSQL("DROP TABLE IF EXISTS " + Db.CategoryTable.TABLE_NAME);
             onCreate(db);
@@ -71,6 +80,7 @@ public class Db {
 
         public static final String COLUMN_ID = "_id";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_INFO = "info";
         public static final String COLUMN_ORDER = "order";
 
         public static final String CREATE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -78,20 +88,6 @@ public class Db {
                 COLUMN_NAME + " TEXT NOT NULL," +
                 COLUMN_ORDER + " INT NOT NULL" +
                 " ); ";
-
-        public static ContentValues toContentValues(Category category) {
-            ContentValues values = new ContentValues();
-            values.put(COLUMN_ID, category.id);
-            values.put(COLUMN_NAME, category.name);
-            values.put(COLUMN_ORDER, category.order);
-            return values;
-        }
-
-        public static Category parseCursor(Cursor cursor) {
-            Category person = new Category();
-            person.name = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_NAME));
-            return person;
-        }
 
         public static void onUpdate(SQLiteDatabase db) {
             db.execSQL("DROP TABLE IF EXISTS " + Db.CategoryTable.TABLE_NAME);

@@ -2,17 +2,32 @@ package com.dietpedia.app.ui.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import com.dietpedia.app.R;
+import com.dietpedia.app.domain.model.Category;
+import com.dietpedia.app.presentation.presenters.MainPresenter;
+import com.dietpedia.app.ui.fragments.CategoryFragment;
+import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
 
-public class MainActivity extends Activity implements MainFragment.Listener {
+import javax.inject.Inject;
+
+public class MainActivity extends FragmentActivity implements MainFragment.Listener, CategoryFragment.Listener, DietFragment.Listener {
+    @Inject
+    MainPresenter mMainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+//        setContentView(R.layout.activity_main);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction()
+                                       .add(android.R.id.content, CategoryFragment.newInstance())
+                                       .commit();
+        }
     }
 
     @Override
