@@ -16,6 +16,7 @@ import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
+import com.dietpedia.app.ui.fragments.MainFragment_MembersInjector;
 import com.dietpedia.app.ui.views.DietListView;
 import com.dietpedia.app.ui.views.DietView;
 import com.dietpedia.app.ui.views.MainView;
@@ -24,8 +25,8 @@ import timber.log.Timber;
 
 import java.util.List;
 
-public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, MainView,
-                                                               DietView, DietListView, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, MainView, DietView,
+                                                          DietListView, NavigationView.OnNavigationItemSelectedListener {
 
     @Bind(R.id.app_bar) Toolbar mToolbar;
     @Bind(R.id.main_drawer) NavigationView mDrawer;
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -54,23 +56,16 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         mDrawerToggle.syncState();
-        hideDrawer();
+        mDrawerLayout.closeDrawer(GravityCompat.START);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, DietListFragment.newInstance()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, MainFragment.newInstance()).commit();
         }
-    }
-
-    private void showDrawer() {
-        mDrawerLayout.openDrawer(GravityCompat.START);
-    }
-
-    protected void hideDrawer() {
-        mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         // Inflate the menu; this adds items to the action bar if it is present.
         return true;
     }
@@ -80,8 +75,11 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -108,6 +106,18 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Timber.d("Nav Clicked!");
-        return false;
+        mDrawerLayout.closeDrawers();
+        return true;
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

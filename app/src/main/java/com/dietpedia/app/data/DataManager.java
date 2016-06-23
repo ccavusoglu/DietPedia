@@ -6,6 +6,9 @@ import com.dietpedia.app.domain.model.Category;
 import rx.Observable;
 import rx.Scheduler;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
@@ -30,7 +33,7 @@ public class DataManager {
         return mDatabaseHelper.saveCategory(person);
     }
 
-    public Observable<Category> getCategory() {
-        return mDatabaseHelper.getCategory();
+    public Observable<List<Category>> getCategories() {
+        return mDatabaseHelper.getCategories();
     }
 }

@@ -97,7 +97,6 @@ public abstract class Diet {
         public Builder dinner(String dinner) {
             values.put(Db.DietTable.COLUMN_DINNER, dinner);
             return this;
-
         }
 
         public Builder snack1(String snack1) {

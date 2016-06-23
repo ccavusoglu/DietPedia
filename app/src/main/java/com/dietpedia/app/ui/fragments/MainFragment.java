@@ -1,12 +1,13 @@
 package com.dietpedia.app.ui.fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.Bind;
@@ -28,9 +29,13 @@ import java.util.List;
 public class MainFragment extends Fragment implements MainView {
     @Inject MainPresenter mMainPresenter;
     @Inject BriteDatabase db;
-    @Inject MainAdapter mMainAdapter;
+    @Inject MainAdapter   mMainAdapter;
 
     @Bind(R.id.main_rv) RecyclerView mRecyclerView;
+
+    public static MainFragment newInstance() {
+        return new MainFragment();
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -56,26 +61,32 @@ public class MainFragment extends Fragment implements MainView {
         ButterKnife.bind(this, view);
 
         mRecyclerView.setAdapter(mMainAdapter);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        ((BaseActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//        ((BaseActivity) getActivity()).mToolbarIcon.setBackgroundResource(R.drawable.bottom_news);
-//        ((BaseActivity) getActivity()).mToolbarIcon.setVisibility(View.VISIBLE);
-//        ((BaseActivity) getActivity()).mToolbarTitle.setGravity(Gravity.CENTER);
-//
-//        ((BaseActivity) getActivity()).addShareAction(false);
+        //        ((BaseActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        //        ((BaseActivity) getActivity()).mToolbarIcon.setBackgroundResource(R.drawable.bottom_news);
+        //        ((BaseActivity) getActivity()).mToolbarIcon.setVisibility(View.VISIBLE);
+        //        ((BaseActivity) getActivity()).mToolbarTitle.setGravity(Gravity.CENTER);
+        //
+        //        ((BaseActivity) getActivity()).addShareAction(false);
 
         return view;
     }
 
     @Override
     public void showCategories(List<Category> categories) {
-
+        mMainAdapter.setCategories(categories);
+        mMainAdapter.notifyDataSetChanged();
     }
 
     public interface Listener {
         void onListClicked(long id);
 
         void onNewListClicked();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 }
