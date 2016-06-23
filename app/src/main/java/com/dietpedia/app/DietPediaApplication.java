@@ -6,6 +6,7 @@ import com.dietpedia.app.data.DataManager;
 import com.dietpedia.app.infrastructure.di.DaggerDietPediaComponent;
 import com.dietpedia.app.infrastructure.di.DietPediaComponent;
 import com.dietpedia.app.infrastructure.di.DietPediaModule;
+import hugo.weaving.DebugLog;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -21,6 +22,7 @@ public class DietPediaApplication extends Application {
     }
 
     @Override
+    @DebugLog
     public void onCreate() {
         super.onCreate();
 

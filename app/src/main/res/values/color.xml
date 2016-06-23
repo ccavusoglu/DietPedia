@@ -10,6 +10,6 @@
     <color name="colorDivider">#B6B6B6</color>
     <color name="colorTextIcons">#FFFFFF</color>
 
-    <color name="drawer_item_default">#727272</color>
+    <color name="drawer_item_default">#212121</color>
     <color name="drawer_item_checked">#FFCDD2</color>
 </resources>

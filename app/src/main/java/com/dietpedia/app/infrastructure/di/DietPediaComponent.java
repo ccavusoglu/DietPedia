@@ -1,8 +1,9 @@
 package com.dietpedia.app.infrastructure.di;
 
+import android.content.Context;
 import com.dietpedia.app.ui.activities.MainActivity;
-import com.dietpedia.app.ui.fragments.CategoryFragment;
 import com.dietpedia.app.ui.fragments.DietFragment;
+import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
 import dagger.Component;
 
@@ -14,8 +15,14 @@ import javax.inject.Singleton;
 @Singleton
 @Component(modules = DietPediaModule.class)
 public interface DietPediaComponent {
-        void inject(MainFragment fragment);
-        void inject(DietFragment fragment);
-        void inject(CategoryFragment fragment);
-        void inject(MainActivity activity);
+    void inject(MainFragment fragment);
+
+    void inject(DietFragment fragment);
+
+    void inject(DietListFragment fragment);
+
+    void inject(MainActivity activity);
+
+    @ApplicationContext
+    Context context();
 }

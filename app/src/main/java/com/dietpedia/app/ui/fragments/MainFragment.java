@@ -1,33 +1,81 @@
 package com.dietpedia.app.ui.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import com.dietpedia.app.DietPediaApplication;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import com.dietpedia.app.R;
+import com.dietpedia.app.domain.model.Category;
+import com.dietpedia.app.presentation.presenters.MainPresenter;
+import com.dietpedia.app.ui.activities.BaseActivity;
+import com.dietpedia.app.ui.adapters.MainAdapter;
+import com.dietpedia.app.ui.views.MainView;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
-public class MainFragment extends Fragment {
-    public interface Listener {
-        void onListClicked(long id);
-        void onNewListClicked();
-    }
+public class MainFragment extends Fragment implements MainView {
+    @Inject MainPresenter mMainPresenter;
+    @Inject BriteDatabase db;
+    @Inject MainAdapter mMainAdapter;
 
-    @Inject
-    BriteDatabase db;
+    @Bind(R.id.main_rv) RecyclerView mRecyclerView;
 
     @Override
-    public void onAttach(Activity activity) {
-        if (!(activity instanceof Listener)) {
-            throw new IllegalStateException("Activity must implement fragment Listener.");
-        }
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        super.onAttach(activity);
-        DietPediaApplication.getComponent(activity).inject(this);
+        ((BaseActivity) getActivity()).getDietPediaComponent().inject(this);
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mMainAdapter.attachAdapter(this);
+
+        mMainPresenter.attachView(this);
+        mMainPresenter.loadCategories();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.bind(this, view);
+
+        mRecyclerView.setAdapter(mMainAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ((BaseActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+//        ((BaseActivity) getActivity()).mToolbarIcon.setBackgroundResource(R.drawable.bottom_news);
+//        ((BaseActivity) getActivity()).mToolbarIcon.setVisibility(View.VISIBLE);
+//        ((BaseActivity) getActivity()).mToolbarTitle.setGravity(Gravity.CENTER);
+//
+//        ((BaseActivity) getActivity()).addShareAction(false);
+
+        return view;
+    }
+
+    @Override
+    public void showCategories(List<Category> categories) {
+
+    }
+
+    public interface Listener {
+        void onListClicked(long id);
+
+        void onNewListClicked();
     }
 }

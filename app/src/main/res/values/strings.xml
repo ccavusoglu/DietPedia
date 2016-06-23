@@ -7,4 +7,7 @@
     <string name="category2">Diet 2</string>
     <string name="category3">Diet 3</string>
     <string name="category4">Diet 4</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
 </resources>

@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="@string/categories">
-        <group android:id="@+id/group2" android:checkableBehavior="single">
-            <item
-                    android:id="@+id/navigation_item_1"
-                    android:title="@string/category1"/>
-            <item
-                    android:id="@+id/navigation_item_2"
-                    android:title="@string/category2"/>
-            <item
-                    android:id="@+id/navigation_item_3"
-                    android:title="@string/category3"/>
-            <item
-                    android:id="@+id/navigation_item_4"
-                    android:title="@string/category4"/>
-        </group>
+        <menu>
+            <group android:id="@+id/group2" android:checkableBehavior="single">
+                <item
+                        android:id="@+id/navigation_item_1"
+                        android:icon="@drawable/ic_cake_black_48dp"
+                        android:title="@string/category1"/>
+                <item
+                        android:id="@+id/navigation_item_2"
+                        android:icon="@drawable/ic_cake_black_48dp"
+                        android:title="@string/category2"/>
+                <item
+                        android:id="@+id/navigation_item_3"
+                        android:icon="@drawable/ic_cake_black_48dp"
+                        android:title="@string/category3"/>
+                <item
+                        android:id="@+id/navigation_item_4"
+                        android:icon="@drawable/ic_cake_black_48dp"
+                        android:title="@string/category4"/>
+            </group>
+        </menu>
     </item>
 
     <group android:id="@+id/group3" android:checkableBehavior="single">
         <item
                 android:id="@+id/navigation_item_8"
+                android:icon="@drawable/ic_cake_black_48dp"
                 android:title="@string/settings"/>
         <item
                 android:id="@+id/navigation_item_9"
+                android:icon="@drawable/ic_cake_black_48dp"
                 android:title="@string/about"/>
     </group>
 </menu>
