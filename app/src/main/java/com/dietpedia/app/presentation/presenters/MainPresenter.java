@@ -5,12 +5,12 @@ import com.dietpedia.app.DietPediaApplication;
 import com.dietpedia.app.data.DataManager;
 import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.ui.views.MainView;
+import hugo.weaving.DebugLog;
 import rx.Subscriber;
 import rx.Subscription;
 import timber.log.Timber;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,8 +45,10 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
 
             @Override
+            @DebugLog
             public void onNext(List<Category> categories) {
                 if (categories != null) {
+                    Timber.d("onNext: " + Thread.currentThread().getName());
                     getMvpView().showCategories(categories);
                 } else {
                     //// FIXME: 23.06.2016 => null case handling

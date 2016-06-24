@@ -15,15 +15,11 @@ public abstract class Category {
     public static Func1<Cursor, Category> MAP = new Func1<Cursor, Category>() {
         @Override
         public Category call(final Cursor cursor) {
-            try {
-                long id = Db.getLong(cursor, Db.CategoryTable.COLUMN_ID);
-                String name = Db.getString(cursor, Db.CategoryTable.COLUMN_NAME);
-                String info = Db.getString(cursor, Db.CategoryTable.COLUMN_INFO);
-                int order = Db.getInt(cursor, Db.CategoryTable.COLUMN_SORT);
-                return new AutoValue_Category(id, name, info, order);
-            } finally {
-                cursor.close();
-            }
+            long id = Db.getLong(cursor, Db.CategoryTable.COLUMN_ID);
+            String name = Db.getString(cursor, Db.CategoryTable.COLUMN_NAME);
+            String info = Db.getString(cursor, Db.CategoryTable.COLUMN_INFO);
+            int order = Db.getInt(cursor, Db.CategoryTable.COLUMN_SORT);
+            return new AutoValue_Category(id, name, info, order);
         }
     };
 

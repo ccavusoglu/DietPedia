@@ -1,14 +1,14 @@
 package com.dietpedia.app.data.local;
 
 import android.content.Context;
-import android.database.Cursor;
 import com.dietpedia.app.domain.model.Category;
+import com.dietpedia.app.domain.model.Diet;
 import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class DatabaseHelper {
     private BriteDatabase db;
+    private static String ALIAS_CATEGORY = "c";
+    private static String ALIAS_DIET = "d";
 
     public DatabaseHelper(Context context) {
         SqlBrite mSqlBrite = SqlBrite.create();
@@ -26,15 +28,35 @@ public class DatabaseHelper {
 
     public Observable<List<Category>> getCategories() {
         final String QUERY =
-                "" + "SELECT " + Db.CategoryTable.COLUMN_ID + ", " + Db.CategoryTable.COLUMN_NAME + ", " + Db.CategoryTable.COLUMN_INFO + ", " + Db.CategoryTable
-                        .COLUMN_SORT + " FROM " + Db.CategoryTable.TABLE_NAME;
-
-        QueryObservable a = db.createQuery(Db.CategoryTable.TABLE_NAME, QUERY);
+                "" + "SELECT " + Db.CategoryTable.COLUMN_ID + ", " + Db.CategoryTable.COLUMN_NAME + ", " + Db.CategoryTable.COLUMN_INFO + ", " + Db
+                        .CategoryTable.COLUMN_SORT + " FROM " + Db.CategoryTable.TABLE_NAME;
 
         return db.createQuery(Db.CategoryTable.TABLE_NAME, QUERY).mapToList(Category.MAP);
     }
 
-    public Observable<Category> saveCategory(final Category person) {
+    public Observable<List<Diet>> getDietList(String name) {
+        final String QUERY =
+                "" + "SELECT "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_INFO + ""
+                + " FROM " + Db.DietTable.TABLE_NAME + " AS " + ALIAS_DIET
+                + " LEFT OUTER JOIN " + Db.CategoryTable.TABLE_NAME + " AS " + ALIAS_CATEGORY
+                        + " ON " + ALIAS_DIET + "." + Db.DietTable.COLUMN_CATEGORYID + " = "
+                        + ALIAS_CATEGORY + "." + Db.CategoryTable.COLUMN_ID
+                + " WHERE " + ALIAS_CATEGORY + "." + Db.CategoryTable.COLUMN_NAME + " = '" + name + "'";
+
+        return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.CategoryTable.TABLE_NAME), QUERY).mapToList(Diet.MAP);
+    }
+
+    public Observable<Diet> getDiet(int index) {
+        final String QUERY =
+                "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE _id = " + index;
+
+        return db.createQuery(Db.DietTable.TABLE_NAME, QUERY).mapToOne(Diet.MAP);
+    }
+
+    public Observable<Category> saveCategory(final Category category) {
         return null;
     }
 }

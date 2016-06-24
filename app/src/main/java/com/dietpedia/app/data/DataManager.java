@@ -3,10 +3,10 @@ package com.dietpedia.app.data;
 import android.content.Context;
 import com.dietpedia.app.data.local.DatabaseHelper;
 import com.dietpedia.app.domain.model.Category;
+import com.dietpedia.app.domain.model.Diet;
 import rx.Observable;
 import rx.Scheduler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,5 +35,13 @@ public class DataManager {
 
     public Observable<List<Category>> getCategories() {
         return mDatabaseHelper.getCategories();
+    }
+
+    public Observable<List<Diet>> getDietList(String name) {
+        return mDatabaseHelper.getDietList(name);
+    }
+
+    public Observable<Diet> getDiet(int index) {
+        return mDatabaseHelper.getDiet(index);
     }
 }

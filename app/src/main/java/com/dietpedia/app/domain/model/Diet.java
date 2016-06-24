@@ -2,13 +2,9 @@ package com.dietpedia.app.domain.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Parcelable;
 import com.dietpedia.app.data.local.Db;
 import com.google.auto.value.AutoValue;
 import rx.functions.Func1;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Çağatay Çavuşoğlu on 21.06.2016.
@@ -16,49 +12,52 @@ import java.util.List;
 
 @AutoValue
 public abstract class Diet {
-    public static Func1<Cursor, List<Diet>> MAP = new Func1<Cursor, List<Diet>>() {
+    public static Func1<Cursor, Diet> MAP = new Func1<Cursor, Diet>() {
         @Override
-        public List<Diet> call(final Cursor cursor) {
-            try {
-                List<Diet> values = new ArrayList<>(cursor.getCount());
+        public Diet call(final Cursor cursor) {
+            long id = Db.getLong(cursor, Db.DietTable.COLUMN_ID);
+            String name = Db.getString(cursor, Db.DietTable.COLUMN_NAME);
+            String info = Db.getString(cursor, Db.DietTable.COLUMN_INFO);
+            long categoryId = Db.getInt(cursor, Db.DietTable.COLUMN_CATEGORYID);
 
-                while (cursor.moveToNext()) {
-                    long id = Db.getLong(cursor, Db.DietTable.COLUMN_ID);
-                    String name = Db.getString(cursor, Db.DietTable.COLUMN_NAME);
-                    String info = Db.getString(cursor, Db.DietTable.COLUMN_INFO);
-                    long categoryId = Db.getInt(cursor, Db.DietTable.COLUMN_CATEGORYID);
+            String breakfast = Db.getString(cursor, Db.DietTable.COLUMN_BREAKFAST);
+            String lunch = Db.getString(cursor, Db.DietTable.COLUMN_LUNCH);
+            String dinner = Db.getString(cursor, Db.DietTable.COLUMN_DINNER);
+            String snack1 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK1);
+            String snack2 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK2);
+            String snack3 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK3);
+            String snack4 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK4);
+            String snack5 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK5);
+            String snack6 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK6);
 
-                    String breakfast = Db.getString(cursor, Db.DietTable.COLUMN_BREAKFAST);
-                    String lunch = Db.getString(cursor, Db.DietTable.COLUMN_LUNCH);
-                    String dinner = Db.getString(cursor, Db.DietTable.COLUMN_DINNER);
-                    String snack1 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK1);
-                    String snack2 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK2);
-                    String snack3 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK3);
-                    String snack4 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK4);
-                    String snack5 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK5);
-                    String snack6 = Db.getString(cursor, Db.DietTable.COLUMN_SNACK6);
-
-                    values.add(new AutoValue_Diet(id, name, info, categoryId, breakfast, lunch, dinner, snack1, snack2, snack3, snack4, snack5, snack6));
-                }
-                return values;
-            } finally {
-                cursor.close();
-            }
+            return new AutoValue_Diet(id, name, info, categoryId, breakfast, lunch, dinner, snack1, snack2, snack3, snack4, snack5, snack6);
         }
     };
 
     public abstract long id();
+
     public abstract String name();
+
     public abstract String info();
+
     public abstract long categoryId();
+
     public abstract String breakfast();
+
     public abstract String lunch();
+
     public abstract String dinner();
+
     public abstract String snack1();
+
     public abstract String snack2();
+
     public abstract String snack3();
+
     public abstract String snack4();
+
     public abstract String snack5();
+
     public abstract String snack6();
 
     public static final class Builder {

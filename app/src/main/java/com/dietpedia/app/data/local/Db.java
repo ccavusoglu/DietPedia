@@ -9,14 +9,17 @@ import hugo.weaving.DebugLog;
  */
 public class Db {
     public static final int BOOLEAN_FALSE = 0;
-    public static final int BOOLEAN_TRUE  = 1;
+    public static final int BOOLEAN_TRUE = 1;
 
     private Db() {
         throw new AssertionError("No instances.");
     }
 
     public static String getString(Cursor cursor, String columnName) {
-        return cursor.getString(cursor.getColumnIndexOrThrow(columnName));
+        int index = cursor.getColumnIndex(columnName);
+        if (index == -1) return "";
+
+        return cursor.getString(index);
     }
 
     public static boolean getBoolean(Cursor cursor, String columnName) {
@@ -24,29 +27,35 @@ public class Db {
     }
 
     public static int getInt(Cursor cursor, String columnName) {
-        return cursor.getInt(cursor.getColumnIndexOrThrow(columnName));
+        int index = cursor.getColumnIndex(columnName);
+        if (index == -1) return 0;
+
+        return cursor.getInt(index);
     }
 
     public static long getLong(Cursor cursor, String columnName) {
-        return cursor.getLong(cursor.getColumnIndexOrThrow(columnName));
+        int index = cursor.getColumnIndex(columnName);
+        if (index == -1) return 0;
+
+        return cursor.getLong(index);
     }
 
     public static abstract class DietTable {
         public static final String TABLE_NAME = "diet";
 
-        public static final String COLUMN_ID         = "_id";
-        public static final String COLUMN_NAME       = "name";
-        public static final String COLUMN_INFO       = "info";
+        public static final String COLUMN_ID = "_id";
+        public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_INFO = "info";
         public static final String COLUMN_CATEGORYID = "catId";
-        public static final String COLUMN_BREAKFAST  = "breakfast";
-        public static final String COLUMN_LUNCH      = "lunch";
-        public static final String COLUMN_DINNER     = "dinner";
-        public static final String COLUMN_SNACK1     = "snack1";
-        public static final String COLUMN_SNACK2     = "snack2";
-        public static final String COLUMN_SNACK3     = "snack3";
-        public static final String COLUMN_SNACK4     = "snack4";
-        public static final String COLUMN_SNACK5     = "snack5";
-        public static final String COLUMN_SNACK6     = "snack6";
+        public static final String COLUMN_BREAKFAST = "breakfast";
+        public static final String COLUMN_LUNCH = "lunch";
+        public static final String COLUMN_DINNER = "dinner";
+        public static final String COLUMN_SNACK1 = "snack1";
+        public static final String COLUMN_SNACK2 = "snack2";
+        public static final String COLUMN_SNACK3 = "snack3";
+        public static final String COLUMN_SNACK4 = "snack4";
+        public static final String COLUMN_SNACK5 = "snack5";
+        public static final String COLUMN_SNACK6 = "snack6";
 
         public static final String CREATE = "" + "CREATE TABLE " + TABLE_NAME + "(" +
                 COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
@@ -79,17 +88,14 @@ public class Db {
     public static abstract class CategoryTable {
         public static final String TABLE_NAME = "category";
 
-        public static final String COLUMN_ID   = "_id";
+        public static final String COLUMN_ID = "_id";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_INFO = "info";
         public static final String COLUMN_SORT = "sort";
 
         public static final String CREATE =
-                "" + "CREATE TABLE " + TABLE_NAME + "("
-                        + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        + COLUMN_NAME + " TEXT NOT NULL,"
-                        + COLUMN_INFO + " TEXT NOT NULL,"
-                        + COLUMN_SORT + " INTEGER NOT NULL" +
+                "" + "CREATE TABLE " + TABLE_NAME + "(" + COLUMN_ID + " INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + COLUMN_NAME + " TEXT NOT " +
+                        "NULL," + COLUMN_INFO + " TEXT NOT NULL," + COLUMN_SORT + " INTEGER NOT NULL" +
                         ")";
 
         @DebugLog

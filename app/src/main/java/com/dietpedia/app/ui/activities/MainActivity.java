@@ -12,21 +12,14 @@ import android.view.MenuItem;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
-import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
-import com.dietpedia.app.ui.fragments.MainFragment_MembersInjector;
-import com.dietpedia.app.ui.views.DietListView;
-import com.dietpedia.app.ui.views.DietView;
-import com.dietpedia.app.ui.views.MainView;
 import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
-import java.util.List;
-
-public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, MainView, DietView,
-                                                          DietListView, NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
+                                                          NavigationView.OnNavigationItemSelectedListener {
 
     @Bind(R.id.app_bar) Toolbar mToolbar;
     @Bind(R.id.main_drawer) NavigationView mDrawer;
@@ -44,15 +37,12 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+getSupportActionBar().setHomeButtonEnabled(true);
 
-//        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
         mDrawer.setNavigationItemSelectedListener(this);
-        mDrawerToggle = new ActionBarDrawerToggle(this,
-                                                  mDrawerLayout,
-                                                  mToolbar,
-                                                  R.string.drawer_open,
-                                                  R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         mDrawerToggle.syncState();
@@ -94,22 +84,33 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     }
 
     @Override
-    public void showDietList() {
-
-    }
-
-    @Override
-    public void showCategories(List<Category> categories) {
-
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         Timber.d("Nav Clicked!");
         mDrawerLayout.closeDrawers();
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+
+        switch (item.getItemId()) {
+            case R.id.navigation_item_1:
+                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString()), DietListFragment.TAG);
+                //        ft.addToBackStack(LoginFragment.TAG);
+                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+
+                ft.commit();
+                break;
+            case R.id.navigation_item_2:
+                break;
+            case R.id.navigation_item_3:
+                break;
+            case R.id.navigation_item_4:
+                break;
+            default:
+                break;
+        }
+
         return true;
     }
-
 
 
     @Override

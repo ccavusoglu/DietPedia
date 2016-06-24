@@ -18,7 +18,8 @@ import com.dietpedia.app.presentation.presenters.MainPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.adapters.MainAdapter;
 import com.dietpedia.app.ui.views.MainView;
-import com.squareup.sqlbrite.BriteDatabase;
+import hugo.weaving.DebugLog;
+import timber.log.Timber;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -28,7 +29,6 @@ import java.util.List;
  */
 public class MainFragment extends Fragment implements MainView {
     @Inject MainPresenter mMainPresenter;
-    @Inject BriteDatabase db;
     @Inject MainAdapter   mMainAdapter;
 
     @Bind(R.id.main_rv) RecyclerView mRecyclerView;
@@ -74,7 +74,9 @@ public class MainFragment extends Fragment implements MainView {
     }
 
     @Override
+    @DebugLog
     public void showCategories(List<Category> categories) {
+        Timber.d("showCategories: " + Thread.currentThread().getName());
         mMainAdapter.setCategories(categories);
         mMainAdapter.notifyDataSetChanged();
     }
