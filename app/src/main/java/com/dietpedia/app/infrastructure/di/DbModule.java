@@ -7,6 +7,7 @@ import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import dagger.Module;
 import dagger.Provides;
+import hugo.weaving.DebugLog;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 
@@ -23,16 +24,19 @@ public final class DbModule {
         return new DbOpenHelper(application);
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     SqlBrite provideSqlBrite() {
         return SqlBrite.create(new SqlBrite.Logger() {
-            @Override public void log(String message) {
+            @Override
+            public void log(String message) {
                 Timber.tag("Database").v(message);
             }
         });
     }
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     BriteDatabase provideDatabase(SqlBrite sqlBrite, SQLiteOpenHelper helper) {
         BriteDatabase db = sqlBrite.wrapDatabaseHelper(helper, Schedulers.io());
         db.setLoggingEnabled(true);

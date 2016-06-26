@@ -55,7 +55,6 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     @Override
-    @DebugLog
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -66,7 +65,6 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     @Override
-    @DebugLog
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dietlist, container, false);
         ButterKnife.bind(this, view);
@@ -85,10 +83,8 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     @Override
-    @DebugLog
     public void showDietList(List<Diet> dietList) {
         mAdapter.setDiets(dietList);
-        Timber.d("showDietList: " + Thread.currentThread().getName());
         mAdapter.notifyDataSetChanged();
     }
 

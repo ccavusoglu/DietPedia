@@ -17,6 +17,14 @@
             app:elevation="4dp"
     >
 
+        <ImageView
+                android:layout_width="132dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:src="@drawable/logo"
+        />
+
     </android.support.v7.widget.Toolbar>
 
 </LinearLayout>

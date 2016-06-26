@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,13 +72,13 @@ public class MainFragment extends Fragment implements MainView {
         //
         //        ((BaseActivity) getActivity()).addShareAction(false);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
         return view;
     }
 
     @Override
-    @DebugLog
     public void showCategories(List<Category> categories) {
-        Timber.d("showCategories: " + Thread.currentThread().getName());
         mMainAdapter.setCategories(categories);
         mMainAdapter.notifyDataSetChanged();
     }

@@ -1,6 +1,5 @@
 package com.dietpedia.app.ui.activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -9,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
@@ -21,9 +21,9 @@ import timber.log.Timber;
 public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
                                                           NavigationView.OnNavigationItemSelectedListener {
 
-    @Bind(R.id.app_bar) Toolbar mToolbar;
-    @Bind(R.id.main_drawer) NavigationView mDrawer;
-    @Bind(R.id.activity_main_dl) DrawerLayout mDrawerLayout;
+    @Bind(R.id.app_bar)          Toolbar        mToolbar;
+    @Bind(R.id.main_drawer)      NavigationView mDrawer;
+    @Bind(R.id.activity_main_dl) DrawerLayout   mDrawerLayout;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -36,20 +36,22 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         ButterKnife.bind(this);
 
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        //        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu);
-        mDrawer.setNavigationItemSelectedListener(this);
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         mDrawerToggle.syncState();
+
+        mDrawer.setNavigationItemSelectedListener(this);
+        //        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
+        // HACK!
+        mDrawer.inflateHeaderView(R.layout.common_drawer_header);
+        mDrawer.getHeaderView(0).setVisibility(View.GONE);
+
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.main_content, MainFragment.newInstance()).commit();
+            getSupportFragmentManager().beginTransaction().addToBackStack("Main").replace(R.id.main_content, MainFragment.newInstance()).commit();
         }
     }
 
@@ -93,17 +95,13 @@ getSupportActionBar().setHomeButtonEnabled(true);
 
         switch (item.getItemId()) {
             case R.id.navigation_item_1:
-                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString()), DietListFragment.TAG);
-                //        ft.addToBackStack(LoginFragment.TAG);
-                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
-
-                ft.commit();
-                break;
             case R.id.navigation_item_2:
-                break;
             case R.id.navigation_item_3:
-                break;
             case R.id.navigation_item_4:
+                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString()), DietListFragment.TAG);
+                ft.addToBackStack(item.getTitle().toString());
+                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft.commit();
                 break;
             default:
                 break;
@@ -118,7 +116,9 @@ getSupportActionBar().setHomeButtonEnabled(true);
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getFragmentManager().getBackStackEntryCount() > 0) {
+                getFragmentManager().popBackStack();
+            } else super.onBackPressed();
         }
     }
 }

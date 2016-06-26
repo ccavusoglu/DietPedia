@@ -32,7 +32,6 @@ public class DietListPresenter extends BasePresenter<DietListView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    @DebugLog
     public void loadDietList(String name) {
         checkViewAttached();
 
@@ -50,7 +49,6 @@ public class DietListPresenter extends BasePresenter<DietListView> {
             @DebugLog
             public void onNext(List<Diet> diets) {
                 if (diets != null) {
-                    Timber.d("onNext: " + Thread.currentThread().getName());
                     getMvpView().showDietList(diets);
                 } else {
                     //// FIXME: 23.06.2016 => null case handling

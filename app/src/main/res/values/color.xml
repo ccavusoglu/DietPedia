@@ -11,5 +11,5 @@
     <color name="colorTextIcons">#FFFFFF</color>
 
     <color name="drawer_item_default">#212121</color>
-    <color name="drawer_item_checked">#FFCDD2</color>
+    <color name="drawer_item_checked">#D32F2F</color>
 </resources>

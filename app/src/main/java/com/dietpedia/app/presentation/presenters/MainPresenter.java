@@ -8,6 +8,7 @@ import com.dietpedia.app.ui.views.MainView;
 import hugo.weaving.DebugLog;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import javax.inject.Inject;
@@ -34,7 +35,8 @@ public class MainPresenter extends BasePresenter<MainView> {
     public void loadCategories() {
         checkViewAttached();
 
-        mSubscription = mDataManager.getCategories().subscribe(new Subscriber<List<Category>>() {
+        // TODO: observeOn should be parametric.
+        mSubscription = mDataManager.getCategories().observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Category>>() {
             @Override
             public void onCompleted() {
             }
@@ -45,10 +47,8 @@ public class MainPresenter extends BasePresenter<MainView> {
             }
 
             @Override
-            @DebugLog
             public void onNext(List<Category> categories) {
                 if (categories != null) {
-                    Timber.d("onNext: " + Thread.currentThread().getName());
                     getMvpView().showCategories(categories);
                 } else {
                     //// FIXME: 23.06.2016 => null case handling

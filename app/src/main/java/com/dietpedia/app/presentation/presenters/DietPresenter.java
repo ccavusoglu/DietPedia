@@ -7,6 +7,7 @@ import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.ui.views.DietView;
 import rx.Subscriber;
 import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 import javax.inject.Inject;
@@ -32,7 +33,7 @@ public class DietPresenter extends BasePresenter<DietView> {
     public void loadDiet(int index) {
         checkViewAttached();
 
-        mSubscription = mDataManager.getDiet(index).subscribe(new Subscriber<Diet>() {
+        mSubscription = mDataManager.getDiet(index).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Diet>() {
             @Override
             public void onCompleted() {
             }

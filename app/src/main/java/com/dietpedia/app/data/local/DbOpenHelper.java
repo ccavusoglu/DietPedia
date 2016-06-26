@@ -15,6 +15,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "dietpedia.db";
     public static final int DATABASE_VERSION = 1;
 
+    @DebugLog
     public DbOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -27,6 +28,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             Db.CategoryTable.onCreate(db);
             Db.DietTable.onCreate(db);
 
+            // TODO: read all from json
             long categoryId = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
                     .name("Shock Diets")
                     .info("INFO HERE")
@@ -68,7 +70,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .build());
 
             long categoryId2 = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
-                    .name("Regional Slimming")
+                    .name("Regional Slimming Diets")
                     .info("INFO HERE")
                     .order(3)
                     .build());
