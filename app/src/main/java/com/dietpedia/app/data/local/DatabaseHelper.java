@@ -5,6 +5,7 @@ import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.domain.model.Diet;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -19,6 +20,7 @@ public class DatabaseHelper {
     private static String ALIAS_CATEGORY = "c";
     private static String ALIAS_DIET = "d";
 
+    @DebugLog
     public DatabaseHelper(Context context) {
         SqlBrite mSqlBrite = SqlBrite.create();
         // FIXME: 23.06.2016 => before going production
@@ -49,9 +51,9 @@ public class DatabaseHelper {
         return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.CategoryTable.TABLE_NAME), QUERY).mapToList(Diet.MAP);
     }
 
-    public Observable<Diet> getDiet(int index) {
+    public Observable<Diet> getDiet(String name) {
         final String QUERY =
-                "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE _id = " + index;
+                "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE " + Db.DietTable.COLUMN_NAME + " = '" + name + "'";
 
         return db.createQuery(Db.DietTable.TABLE_NAME, QUERY).mapToOne(Diet.MAP);
     }

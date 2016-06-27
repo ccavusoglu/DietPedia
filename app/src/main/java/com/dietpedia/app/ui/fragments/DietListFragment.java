@@ -18,8 +18,6 @@ import com.dietpedia.app.presentation.presenters.DietListPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.adapters.DietListAdapter;
 import com.dietpedia.app.ui.views.DietListView;
-import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -29,16 +27,18 @@ import java.util.List;
  */
 public class DietListFragment extends Fragment implements DietListView {
     public static final String TAG = "DietListFragment";
-    private static final String KEY_NAME = "name";
+    private static final String KEY_NAME = "category_name";
+    private static final String KEY_INFO = "category_info";
 
     @Inject DietListPresenter mPresenter;
     @Inject DietListAdapter mAdapter;
 
     @Bind(R.id.dietlist_rv) RecyclerView mRecyclerView;
 
-    public static DietListFragment newInstance(String title) {
+    public static DietListFragment newInstance(String title, String info) {
         Bundle arguments = new Bundle();
         arguments.putString(KEY_NAME, title);
+        arguments.putString(KEY_INFO, info);
 
         DietListFragment fragment = new DietListFragment();
         fragment.setArguments(arguments);
@@ -86,6 +86,18 @@ public class DietListFragment extends Fragment implements DietListView {
     public void showDietList(List<Diet> dietList) {
         mAdapter.setDiets(dietList);
         mAdapter.notifyDataSetChanged();
+    }
+
+    public void dietClicked(Diet diet) {
+        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.main_content, DietFragment.newInstance(diet.name()), DietFragment.TAG);
+        ft.addToBackStack(DietFragment.TAG);
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                               android.R.anim.slide_out_right);
+
+        ft.commit();
     }
 
     public interface Listener {

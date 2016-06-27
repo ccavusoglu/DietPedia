@@ -15,8 +15,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             card_view:cardCornerRadius="8dp"
-            card_view:cardElevation="6dp"
-            card_view:cardMaxElevation="8dp"
+            card_view:cardElevation="4dp"
+            card_view:cardMaxElevation="5dp"
     >
         <RelativeLayout
                 android:id="@+id/top_layout"

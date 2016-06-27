@@ -23,15 +23,15 @@ import javax.inject.Inject;
 public class DietFragment extends Fragment implements DietView {
     public static final String TAG = "DietFragment";
 
-    private final int mIndex;
+    private final String mIndex;
 
     @Inject DietPresenter mPresenter;
 
-    private DietFragment(int index) {
+    private DietFragment(String index) {
         mIndex = index;
     }
 
-    public static DietFragment newInstance(int index) {
+    public static DietFragment newInstance(String index) {
         return new DietFragment(index);
     }
 

@@ -46,7 +46,6 @@ public class DietListPresenter extends BasePresenter<DietListView> {
             }
 
             @Override
-            @DebugLog
             public void onNext(List<Diet> diets) {
                 if (diets != null) {
                     getMvpView().showDietList(diets);

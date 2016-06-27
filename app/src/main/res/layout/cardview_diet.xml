@@ -3,32 +3,42 @@
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:layout_marginTop="4dp"
+              android:layout_marginBottom="4dp"
+              android:layout_marginRight="12dp"
+              android:layout_marginLeft="12dp"
+>
 
     <android.support.v7.widget.CardView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            card_view:cardCornerRadius="1dp"
-            android:layout_margin="12dp"
-            card_view:cardElevation="2dp"
-            card_view:cardMaxElevation="5dp">
-        <LinearLayout
+            android:layout_marginBottom="8dp"
+            card_view:cardCornerRadius="8dp"
+            card_view:cardElevation="3dp"
+            card_view:cardMaxElevation="3dp"
+    >
+        <RelativeLayout
                 android:id="@+id/top_layout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/cv_diet_image"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
+                    android:layout_margin="12dp"
                     android:src="@drawable/diet"
             />
 
             <TextView
-                    android:id="@+id/cv_headline"
+                    android:id="@+id/cv_diet_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="6dp"
+                    android:layout_toRightOf="@+id/cv_diet_image"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginRight="12dp"
                     android:alpha="0.9"
                     android:textColor="@color/colorTextPrimary"
                     android:ellipsize="end"
@@ -37,7 +47,23 @@
                     android:textSize="20sp"
                     android:text="Test"/>
 
-        </LinearLayout>
+            <TextView
+                    android:id="@+id/cv_diet_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/cv_diet_image"
+                    android:layout_below="@+id/cv_diet_title"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginRight="12dp"
+                    android:alpha="0.9"
+                    android:textColor="@color/colorTextPrimary"
+                    android:ellipsize="end"
+                    android:lines="2"
+                    android:textSize="15sp"
+                    android:text="Desc"
+            />
+
+        </RelativeLayout>
     </android.support.v7.widget.CardView>
 
 </LinearLayout>

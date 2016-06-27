@@ -30,7 +30,7 @@ public class DietPresenter extends BasePresenter<DietView> {
         if (mSubscription != null) mSubscription.unsubscribe();
     }
 
-    public void loadDiet(int index) {
+    public void loadDiet(String index) {
         checkViewAttached();
 
         mSubscription = mDataManager.getDiet(index).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<Diet>() {

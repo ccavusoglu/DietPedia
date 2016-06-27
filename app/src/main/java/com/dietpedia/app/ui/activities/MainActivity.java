@@ -87,7 +87,6 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        Timber.d("Nav Clicked!");
         mDrawerLayout.closeDrawers();
 
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
@@ -98,9 +97,11 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
             case R.id.navigation_item_2:
             case R.id.navigation_item_3:
             case R.id.navigation_item_4:
-                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString()), DietListFragment.TAG);
+                // TODO: read categories onCreate!
+                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString(), "INFO HERE"), DietListFragment.TAG);
                 ft.addToBackStack(item.getTitle().toString());
-                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                                       android.R.anim.slide_out_right);
                 ft.commit();
                 break;
             default:

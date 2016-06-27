@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,8 +19,6 @@ import com.dietpedia.app.presentation.presenters.MainPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.adapters.MainAdapter;
 import com.dietpedia.app.ui.views.MainView;
-import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -31,7 +28,7 @@ import java.util.List;
  */
 public class MainFragment extends Fragment implements MainView {
     @Inject MainPresenter mMainPresenter;
-    @Inject MainAdapter   mMainAdapter;
+    @Inject MainAdapter mMainAdapter;
 
     @Bind(R.id.main_rv) RecyclerView mRecyclerView;
 
@@ -78,19 +75,31 @@ public class MainFragment extends Fragment implements MainView {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void showCategories(List<Category> categories) {
         mMainAdapter.setCategories(categories);
         mMainAdapter.notifyDataSetChanged();
+    }
+
+    public void categoryClicked(Category category) {
+        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info()), DietListFragment.TAG);
+        ft.addToBackStack(DietListFragment.TAG);
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
+                               android.R.anim.slide_out_right);
+
+        ft.commit();
     }
 
     public interface Listener {
         void onListClicked(long id);
 
         void onNewListClicked();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }

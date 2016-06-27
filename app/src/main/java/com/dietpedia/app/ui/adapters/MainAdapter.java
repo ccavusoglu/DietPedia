@@ -27,7 +27,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
     @Inject @ApplicationContext Context context;
 
     private List<Category> mCategories;
-    private MainFragment   mFragment;
+    private MainFragment mFragment;
 
     @Inject
     public MainAdapter() {
@@ -63,13 +63,13 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     class MainViewHolder extends RecyclerView.ViewHolder {
         @Bind(R.id.cv_category_title) TextView titleTextView;
-        @Bind(R.id.cv_category_desc)  TextView descTextView;
+        @Bind(R.id.cv_category_desc) TextView descTextView;
 
         public MainViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
 
-            // TODO: use singleton types
+            // TODO: use singleton(?) types
             final Typeface type = Typeface.createFromAsset(context.getAssets(), Utils.BOLD_FONT);
             final Typeface type1 = Typeface.createFromAsset(context.getAssets(), Utils.REGULAR_FONT);
             titleTextView.setTypeface(type);
@@ -78,6 +78,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    mFragment.categoryClicked(mCategories.get(getLayoutPosition()));
+
                     Timber.d(v.toString());
                 }
             });

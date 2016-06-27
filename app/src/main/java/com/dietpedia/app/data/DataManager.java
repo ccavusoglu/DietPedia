@@ -4,6 +4,7 @@ import android.content.Context;
 import com.dietpedia.app.data.local.DatabaseHelper;
 import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.domain.model.Diet;
+import hugo.weaving.DebugLog;
 import rx.Observable;
 import rx.Scheduler;
 
@@ -16,6 +17,7 @@ public class DataManager {
     private DatabaseHelper mDatabaseHelper;
     private Scheduler mScheduler;
 
+    @DebugLog
     public DataManager(Context context, Scheduler scheduler) {
         mDatabaseHelper = new DatabaseHelper(context);
         mScheduler = scheduler;
@@ -41,7 +43,7 @@ public class DataManager {
         return mDatabaseHelper.getDietList(name);
     }
 
-    public Observable<Diet> getDiet(int index) {
+    public Observable<Diet> getDiet(String index) {
         return mDatabaseHelper.getDiet(index);
     }
 }
