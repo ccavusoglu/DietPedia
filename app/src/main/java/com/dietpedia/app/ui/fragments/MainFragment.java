@@ -27,8 +27,9 @@ import java.util.List;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class MainFragment extends Fragment implements MainView {
+    public static final String TAG = "MainFragment";
     @Inject MainPresenter mMainPresenter;
-    @Inject MainAdapter mMainAdapter;
+    @Inject MainAdapter   mMainAdapter;
 
     @Bind(R.id.main_rv) RecyclerView mRecyclerView;
 
@@ -89,10 +90,9 @@ public class MainFragment extends Fragment implements MainView {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
-        ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info()), DietListFragment.TAG);
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
+        ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info(), null), DietListFragment.TAG);
         ft.addToBackStack(DietListFragment.TAG);
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                               android.R.anim.slide_out_right);
 
         ft.commit();
     }

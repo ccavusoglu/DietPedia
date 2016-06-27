@@ -3,8 +3,10 @@ package com.dietpedia.app.ui.activities;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,15 +18,15 @@ import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
 import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
-                                                          NavigationView.OnNavigationItemSelectedListener {
-
+                                                          NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     @Bind(R.id.app_bar)          Toolbar        mToolbar;
     @Bind(R.id.main_drawer)      NavigationView mDrawer;
     @Bind(R.id.activity_main_dl) DrawerLayout   mDrawerLayout;
 
+    private MenuItem              mSearchMenuItem;
+    private SearchView            mSearchView;
     private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
@@ -58,7 +60,11 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        // Inflate the menu; this adds items to the action bar if it is present.
+
+        mSearchMenuItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        mSearchView.setOnQueryTextListener(this);
+
         return true;
     }
 
@@ -98,10 +104,9 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
             case R.id.navigation_item_3:
             case R.id.navigation_item_4:
                 // TODO: read categories onCreate!
-                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString(), "INFO HERE"), DietListFragment.TAG);
+                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
+                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString(), "INFO HERE", null), DietListFragment.TAG);
                 ft.addToBackStack(item.getTitle().toString());
-                ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                                       android.R.anim.slide_out_right);
                 ft.commit();
                 break;
             default:
@@ -110,7 +115,6 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
         return true;
     }
-
 
     @Override
     public void onBackPressed() {
@@ -121,5 +125,25 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
                 getFragmentManager().popBackStack();
             } else super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        query = query.toLowerCase();
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+
+        //        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
+        ft.replace(R.id.main_content, DietListFragment.newInstance("", "", query), DietListFragment.TAG);
+        ft.addToBackStack(MainFragment.TAG);
+        ft.commit();
+
+        return false;
     }
 }

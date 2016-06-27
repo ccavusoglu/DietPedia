@@ -43,6 +43,10 @@ public class DataManager {
         return mDatabaseHelper.getDietList(name);
     }
 
+    public Observable<List<Diet>> getCustomDietList(String query) {
+        return mDatabaseHelper.getCustomDietList(query);
+    }
+
     public Observable<Diet> getDiet(String index) {
         return mDatabaseHelper.getDiet(index);
     }

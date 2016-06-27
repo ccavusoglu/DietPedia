@@ -56,4 +56,29 @@ public class DietListPresenter extends BasePresenter<DietListView> {
             }
         });
     }
+
+    public void loadCustomDietList(String query) {
+        checkViewAttached();
+
+        mSubscription = mDataManager.getCustomDietList(query).observeOn(AndroidSchedulers.mainThread()).subscribe(new Subscriber<List<Diet>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Timber.e(e, "There was an error loading.");
+            }
+
+            @Override
+            public void onNext(List<Diet> diets) {
+                if (diets != null) {
+                    getMvpView().showDietList(diets);
+                } else {
+                    //// FIXME: 23.06.2016 => null case handling
+                    //                    getMvpView().showCategories(categories);
+                }
+            }
+        });
+    }
 }

@@ -26,19 +26,21 @@ import java.util.List;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class DietListFragment extends Fragment implements DietListView {
-    public static final String TAG = "DietListFragment";
-    private static final String KEY_NAME = "category_name";
-    private static final String KEY_INFO = "category_info";
+    public static final  String TAG       = "DietListFragment";
+    private static final String KEY_NAME  = "category_name";
+    private static final String KEY_INFO  = "category_info";
+    private static final String KEY_QUERY = "query";
 
     @Inject DietListPresenter mPresenter;
-    @Inject DietListAdapter mAdapter;
+    @Inject DietListAdapter   mAdapter;
 
     @Bind(R.id.dietlist_rv) RecyclerView mRecyclerView;
 
-    public static DietListFragment newInstance(String title, String info) {
+    public static DietListFragment newInstance(String title, String info, String query) {
         Bundle arguments = new Bundle();
         arguments.putString(KEY_NAME, title);
         arguments.putString(KEY_INFO, info);
+        arguments.putString(KEY_QUERY, query);
 
         DietListFragment fragment = new DietListFragment();
         fragment.setArguments(arguments);
@@ -61,7 +63,9 @@ public class DietListFragment extends Fragment implements DietListView {
         mAdapter.attachAdapter(this);
 
         mPresenter.attachView(this);
-        mPresenter.loadDietList(getArguments().getString(KEY_NAME));
+
+        if (getArguments().getString(KEY_QUERY) != null) mPresenter.loadCustomDietList(getArguments().getString(KEY_QUERY));
+        else mPresenter.loadDietList(getArguments().getString(KEY_NAME));
     }
 
     @Override
@@ -83,6 +87,11 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public void showDietList(List<Diet> dietList) {
         mAdapter.setDiets(dietList);
         mAdapter.notifyDataSetChanged();
@@ -92,10 +101,9 @@ public class DietListFragment extends Fragment implements DietListView {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
+        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
         ft.replace(R.id.main_content, DietFragment.newInstance(diet.name()), DietFragment.TAG);
         ft.addToBackStack(DietFragment.TAG);
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-                               android.R.anim.slide_out_right);
 
         ft.commit();
     }
@@ -104,10 +112,5 @@ public class DietListFragment extends Fragment implements DietListView {
         void onListClicked(long id);
 
         void onNewListClicked();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
     }
 }

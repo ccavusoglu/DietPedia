@@ -51,6 +51,21 @@ public class DatabaseHelper {
         return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.CategoryTable.TABLE_NAME), QUERY).mapToList(Diet.MAP);
     }
 
+    public Observable<List<Diet>> getCustomDietList(String query) {
+        final String QUERY =
+                "" + "SELECT "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_INFO + ""
+                + " FROM " + Db.DietTable.TABLE_NAME + " AS " + ALIAS_DIET
+                + " LEFT OUTER JOIN " + Db.CategoryTable.TABLE_NAME + " AS " + ALIAS_CATEGORY
+                        + " ON " + ALIAS_DIET + "." + Db.DietTable.COLUMN_CATEGORYID + " = "
+                        + ALIAS_CATEGORY + "." + Db.CategoryTable.COLUMN_ID
+                + " WHERE " + ALIAS_CATEGORY + "." + Db.CategoryTable.COLUMN_NAME + " like '" + query + "'";
+
+        return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.CategoryTable.TABLE_NAME), QUERY).mapToList(Diet.MAP);
+    }
+
     public Observable<Diet> getDiet(String name) {
         final String QUERY =
                 "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE " + Db.DietTable.COLUMN_NAME + " = '" + name + "'";
