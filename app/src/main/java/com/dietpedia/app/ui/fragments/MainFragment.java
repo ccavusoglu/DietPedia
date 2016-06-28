@@ -11,12 +11,14 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
 import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.presentation.presenters.MainPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
+import com.dietpedia.app.ui.activities.MainActivity;
 import com.dietpedia.app.ui.adapters.MainAdapter;
 import com.dietpedia.app.ui.views.MainView;
 
@@ -33,6 +35,8 @@ public class MainFragment extends Fragment implements MainView {
 
     @Bind(R.id.main_rv) RecyclerView mRecyclerView;
 
+    private Listener mListener;
+
     public static MainFragment newInstance() {
         return new MainFragment();
     }
@@ -43,6 +47,7 @@ public class MainFragment extends Fragment implements MainView {
 
         ((BaseActivity) getActivity()).getDietPediaComponent().inject(this);
         setHasOptionsMenu(true);
+        mListener = (Listener) context;
     }
 
     @Override
@@ -76,6 +81,21 @@ public class MainFragment extends Fragment implements MainView {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        mListener.disableCollapsing();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
+        a.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
@@ -97,8 +117,6 @@ public class MainFragment extends Fragment implements MainView {
     }
 
     public interface Listener {
-        void onListClicked(long id);
-
-        void onNewListClicked();
+        void disableCollapsing();
     }
 }

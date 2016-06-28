@@ -4,20 +4,27 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
 import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.presentation.presenters.DietListPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
+import com.dietpedia.app.ui.activities.MainActivity;
 import com.dietpedia.app.ui.adapters.DietListAdapter;
 import com.dietpedia.app.ui.views.DietListView;
+import com.google.gson.Gson;
+import hugo.weaving.DebugLog;
+import timber.log.Timber;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -30,11 +37,11 @@ public class DietListFragment extends Fragment implements DietListView {
     private static final String KEY_NAME  = "category_name";
     private static final String KEY_INFO  = "category_info";
     private static final String KEY_QUERY = "query";
-
     @Inject DietListPresenter mPresenter;
     @Inject DietListAdapter   mAdapter;
-
     @Bind(R.id.dietlist_rv) RecyclerView mRecyclerView;
+
+    private Listener mListener;
 
     public static DietListFragment newInstance(String title, String info, String query) {
         Bundle arguments = new Bundle();
@@ -54,6 +61,8 @@ public class DietListFragment extends Fragment implements DietListView {
 
         ((BaseActivity) getActivity()).getDietPediaComponent().inject(this);
         setHasOptionsMenu(true);
+
+        mListener = (Listener) context;
     }
 
     @Override
@@ -87,6 +96,19 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
+        a.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mListener.disableCollapsing();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
@@ -98,8 +120,8 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     public void dietClicked(Diet diet) {
-        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
 
         ft.replace(R.id.main_content, DietFragment.newInstance(diet.name()), DietFragment.TAG);
         ft.addToBackStack(DietFragment.TAG);
@@ -108,8 +130,6 @@ public class DietListFragment extends Fragment implements DietListView {
     }
 
     public interface Listener {
-        void onListClicked(long id);
-
-        void onNewListClicked();
+        void disableCollapsing();
     }
 }

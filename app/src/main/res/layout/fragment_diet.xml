@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/material_grey_300"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:background="@color/material_grey_300"
 >
+    <android.support.design.widget.CoordinatorLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-</LinearLayout>
+        <com.dietpedia.app.ui.widget.SlidingLayout
+                android:id="@+id/pane_one"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:colorBackground="#A55"
+                android:text="Card 1"/>
+
+        <com.dietpedia.app.ui.widget.SlidingLayout
+                android:id="@+id/pane_two"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:colorBackground="#5A5"
+                android:text="Card 2"/>
+
+        <com.dietpedia.app.ui.widget.SlidingLayout
+                android:id="@+id/pane_three"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:colorBackground="#55A"
+                android:text="Card 3"/>
+
+        <com.dietpedia.app.ui.widget.SlidingLayout
+                android:id="@+id/pane_four"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:colorBackground="#5AA"
+                android:text="Card 4"/>
+    </android.support.design.widget.CoordinatorLayout>
+
+</android.support.v4.widget.NestedScrollView>

@@ -14,12 +14,6 @@
 
         <include layout="@layout/common_app_bar"/>
 
-        <FrameLayout android:layout_width="match_parent"
-                     android:layout_height="match_parent"
-                     android:id="@+id/main_content"
-        >
-        </FrameLayout>
-
         <include layout="@layout/common_navigation_view"/>
 
     </android.support.v4.widget.DrawerLayout>

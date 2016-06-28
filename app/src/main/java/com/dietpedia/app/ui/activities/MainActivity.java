@@ -1,12 +1,16 @@
 package com.dietpedia.app.ui.activities;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,22 +22,30 @@ import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
 import com.dietpedia.app.util.Utils;
+import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
 
 public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
                                                           NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
-    public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
-    private static final int ANIM_DURATION_TOOLBAR = 300;
-    private static final int ANIM_DURATION_FAB = 400;
+    public static final  String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
+    private static final int    ANIM_DURATION_TOOLBAR    = 300;
+    private static final int    ANIM_DURATION_FAB        = 400;
 
-    @Bind(R.id.app_bar) Toolbar mToolbar;
-    @Bind(R.id.app_bar_logo) ImageView mToolbarLogo;
-    @Bind(R.id.main_drawer) NavigationView mDrawer;
-    @Bind(R.id.activity_main_dl) DrawerLayout mDrawerLayout;
+    @Bind(R.id.app_bar)            Toolbar                 mToolbar;
+    @Bind(R.id.app_bar_logo)       ImageView               mToolbarLogo;
+    @Bind(R.id.main_drawer)        NavigationView          mDrawer;
+    @Bind(R.id.activity_main_dl)   DrawerLayout            mDrawerLayout;
+    @Bind(R.id.collapsing_image)   ImageView               mImageView;
+    @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
+    @Bind(R.id.appbar)             AppBarLayout            mAppBar;
     //    private MenuItem              mSearchMenuItem;
     //    private SearchView            mSearchView;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private boolean pendingIntroAnimation;
+    private                        ActionBarDrawerToggle   mDrawerToggle;
+    private                        boolean                 pendingIntroAnimation;
+
+    public ImageView getToolbarLogo() {
+        return mToolbarLogo;
+    }
 
     @Override
     @DebugLog
@@ -104,16 +116,6 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     }
 
     @Override
-    public void onListClicked(long id) {
-
-    }
-
-    @Override
-    public void onNewListClicked() {
-
-    }
-
-    @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         mDrawerLayout.closeDrawers();
 
@@ -144,8 +146,39 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         } else {
             if (getFragmentManager().getBackStackEntryCount() > 0) {
                 getFragmentManager().popBackStack();
-            } else super.onBackPressed();
+
+                Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
+                if (fragment instanceof MainFragment || fragment instanceof DietListFragment) {
+                    disableCollapsing();
+                } else if (fragment instanceof DietFragment) {
+                    enableCollapsing();
+                }
+            } else {
+                super.onBackPressed();
+            }
         }
+    }
+
+    @Override
+    public void disableCollapsing() {
+        mImageView.setVisibility(View.GONE);
+        mCollapsingToolbar.setTitleEnabled(false);
+    }
+
+    @Override
+    public void loadBackdrop(int resId) {
+        Picasso.with(this).load(resId).resize(512, 512).centerCrop().into(mImageView);
+    }
+
+    @Override
+    public void enableCollapsing() {
+        mImageView.setVisibility(View.VISIBLE);
+        mCollapsingToolbar.setTitleEnabled(true);
+
+        android.support.v7.widget.Toolbar.LayoutParams params = (android.support.v7.widget.Toolbar.LayoutParams) mToolbarLogo.getLayoutParams();
+        params.gravity = Gravity.CENTER;
+        mToolbarLogo.setLayoutParams(params);
+        mToolbarLogo.invalidate();
     }
 
     @Override
@@ -158,5 +191,9 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         query = query.toLowerCase();
 
         return false;
+    }
+
+    public CollapsingToolbarLayout getCollapsingToolbar() {
+        return mCollapsingToolbar;
     }
 }
