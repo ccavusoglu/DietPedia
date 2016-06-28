@@ -90,7 +90,6 @@ public class MainFragment extends Fragment implements MainView {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
         ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info(), null), DietListFragment.TAG);
         ft.addToBackStack(DietListFragment.TAG);
 

@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,10 +25,11 @@ import java.util.List;
  * Created by ccavusoglu on 23.06.2016.
  */
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder> {
+    private static final int ANIMATED_ITEMS_COUNT = 8;
     @Inject @ApplicationContext Context context;
-
     private List<Category> mCategories;
     private MainFragment mFragment;
+    private int lastAnimatedPosition = -1;
 
     @Inject
     public MainAdapter() {
@@ -46,6 +48,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, int position) {
+        runEnterAnimation(holder.itemView, position);
         Category category = mCategories.get(position);
         //        Picasso.with(context).load("").into(holder.coverImage);
         holder.titleTextView.setText(category.name());
@@ -59,6 +62,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.MainViewHolder
 
     public void attachAdapter(MainFragment mainFragment) {
         mFragment = mainFragment;
+    }
+
+    private void runEnterAnimation(View view, int position) {
+        if (position >= ANIMATED_ITEMS_COUNT - 1) {
+            return;
+        }
+
+        if (position > lastAnimatedPosition) {
+            lastAnimatedPosition = position;
+            view.setTranslationY(Utils.getScreenHeight(context));
+            view.animate().translationY(0).setInterpolator(new DecelerateInterpolator(3.f)).setDuration(1500).start();
+        }
     }
 
     class MainViewHolder extends RecyclerView.ViewHolder {

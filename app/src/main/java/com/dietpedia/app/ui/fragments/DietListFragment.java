@@ -101,7 +101,6 @@ public class DietListFragment extends Fragment implements DietListView {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
-        ft.setCustomAnimations(android.R.anim.slide_in_left, android.R.anim.slide_in_left, android.R.anim.slide_out_right, android.R.anim.slide_out_right);
         ft.replace(R.id.main_content, DietFragment.newInstance(diet.name()), DietFragment.TAG);
         ft.addToBackStack(DietFragment.TAG);
 

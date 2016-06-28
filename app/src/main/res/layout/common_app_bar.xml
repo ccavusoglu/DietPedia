@@ -18,6 +18,7 @@
     >
 
         <ImageView
+                android:id="@+id/app_bar_logo"
                 android:layout_width="132dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
