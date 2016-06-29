@@ -1,36 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/categories">
-        <menu>
-            <group android:id="@+id/group2" android:checkableBehavior="single">
-                <item
-                        android:id="@+id/navigation_item_1"
-                        android:icon="@drawable/ic_cake_black_48dp"
-                        android:title="@string/category1"/>
-                <item
-                        android:id="@+id/navigation_item_2"
-                        android:icon="@drawable/ic_cake_black_48dp"
-                        android:title="@string/category2"/>
-                <item
-                        android:id="@+id/navigation_item_3"
-                        android:icon="@drawable/ic_cake_black_48dp"
-                        android:title="@string/category3"/>
-                <item
-                        android:id="@+id/navigation_item_4"
-                        android:icon="@drawable/ic_cake_black_48dp"
-                        android:title="@string/category4"/>
-            </group>
-        </menu>
-    </item>
+    <group>
+        <item
+                android:id="@+id/navigation_item_0"
+                android:checkable="true"
+                android:icon="@drawable/tree_48"
+                android:title="@string/home"/>
 
-    <group android:id="@+id/group3" android:checkableBehavior="single">
-        <item
-                android:id="@+id/navigation_item_8"
-                android:icon="@drawable/ic_cake_black_48dp"
-                android:title="@string/settings"/>
-        <item
-                android:id="@+id/navigation_item_9"
-                android:icon="@drawable/ic_cake_black_48dp"
-                android:title="@string/about"/>
+        <item android:title="@string/categories">
+            <menu>
+                <group android:id="@+id/group2" android:checkableBehavior="single">
+                    <item
+                            android:id="@+id/navigation_item_1"
+                            android:icon="@drawable/mushroom_48"
+                            android:title="@string/category1"/>
+                    <item
+                            android:id="@+id/navigation_item_2"
+                            android:icon="@drawable/carrot_48"
+                            android:title="@string/category2"/>
+                    <item
+                            android:id="@+id/navigation_item_3"
+                            android:icon="@drawable/carbohy_52"
+                            android:title="@string/category3"/>
+                    <item
+                            android:id="@+id/navigation_item_4"
+                            android:icon="@drawable/tomato_48"
+                            android:title="@string/category4"/>
+                </group>
+            </menu>
+        </item>
+
+        <group android:id="@+id/group3" android:checkableBehavior="single">
+            <item
+                    android:id="@+id/navigation_item_9"
+                    android:icon="@drawable/pitchfork_48"
+                    android:title="@string/about"/>
+        </group>
     </group>
 </menu>

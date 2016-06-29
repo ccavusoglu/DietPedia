@@ -22,9 +22,6 @@ import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.activities.MainActivity;
 import com.dietpedia.app.ui.adapters.DietListAdapter;
 import com.dietpedia.app.ui.views.DietListView;
-import com.google.gson.Gson;
-import hugo.weaving.DebugLog;
-import timber.log.Timber;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -34,20 +31,19 @@ import java.util.List;
  */
 public class DietListFragment extends Fragment implements DietListView {
     public static final  String TAG       = "DietListFragment";
-    private static final String KEY_NAME  = "category_name";
+    public static final String KEY_NAME  = "category_name";
     private static final String KEY_INFO  = "category_info";
-    private static final String KEY_QUERY = "query";
+
     @Inject DietListPresenter mPresenter;
     @Inject DietListAdapter   mAdapter;
     @Bind(R.id.dietlist_rv) RecyclerView mRecyclerView;
 
     private Listener mListener;
 
-    public static DietListFragment newInstance(String title, String info, String query) {
+    public static DietListFragment newInstance(String title, String info) {
         Bundle arguments = new Bundle();
         arguments.putString(KEY_NAME, title);
         arguments.putString(KEY_INFO, info);
-        arguments.putString(KEY_QUERY, query);
 
         DietListFragment fragment = new DietListFragment();
         fragment.setArguments(arguments);
@@ -73,8 +69,7 @@ public class DietListFragment extends Fragment implements DietListView {
 
         mPresenter.attachView(this);
 
-        if (getArguments().getString(KEY_QUERY) != null) mPresenter.loadCustomDietList(getArguments().getString(KEY_QUERY));
-        else mPresenter.loadDietList(getArguments().getString(KEY_NAME));
+        mPresenter.loadDietList(getArguments().getString(KEY_NAME));
     }
 
     @Override
@@ -128,6 +123,8 @@ public class DietListFragment extends Fragment implements DietListView {
 
         ft.commit();
     }
+
+
 
     public interface Listener {
         void disableCollapsing();

@@ -10,7 +10,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +17,7 @@ import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
+import com.dietpedia.app.ui.fragments.AboutFragment;
 import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
@@ -25,7 +25,7 @@ import com.dietpedia.app.util.Utils;
 import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
 
-public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
+public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, AboutFragment.Listener,
                                                           NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     public static final  String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
     private static final int    ANIM_DURATION_TOOLBAR    = 300;
@@ -73,7 +73,8 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
 
-            getSupportFragmentManager().beginTransaction().addToBackStack("Main").replace(R.id.main_content, MainFragment.newInstance()).commit();
+            mDrawer.setCheckedItem(R.id.navigation_item_0);
+            getSupportFragmentManager().beginTransaction().addToBackStack(MainFragment.TAG).replace(R.id.main_content, MainFragment.newInstance()).commit();
         }
     }
 
@@ -123,13 +124,23 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
         switch (item.getItemId()) {
+            case R.id.navigation_item_0:
+                ft.replace(R.id.main_content, MainFragment.newInstance(), MainFragment.TAG);
+                ft.addToBackStack(MainFragment.TAG);
+                ft.commit();
+                break;
             case R.id.navigation_item_1:
             case R.id.navigation_item_2:
             case R.id.navigation_item_3:
             case R.id.navigation_item_4:
                 // TODO: read categories onCreate!
-                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString(), "INFO HERE", null), DietListFragment.TAG);
-                ft.addToBackStack(item.getTitle().toString());
+                ft.replace(R.id.main_content, DietListFragment.newInstance(item.getTitle().toString(), "INFO HERE"), DietListFragment.TAG);
+                ft.addToBackStack(DietListFragment.TAG);
+                ft.commit();
+                break;
+            case R.id.navigation_item_9:
+                ft.replace(R.id.main_content, AboutFragment.newInstance(), AboutFragment.TAG);
+                ft.addToBackStack(AboutFragment.TAG);
                 ft.commit();
                 break;
             default:
@@ -144,14 +155,23 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         } else {
-            if (getFragmentManager().getBackStackEntryCount() > 0) {
-                getFragmentManager().popBackStack();
-
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                 Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_content);
-                if (fragment instanceof MainFragment || fragment instanceof DietListFragment) {
+
+                if (fragment instanceof MainFragment) {
                     disableCollapsing();
+                    finish();
+                } else if (fragment instanceof DietListFragment) {
+                    disableCollapsing();
+                    mDrawer.setCheckedItem(R.id.navigation_item_0);
+
+                    getSupportFragmentManager().popBackStack(MainFragment.TAG, 0);
                 } else if (fragment instanceof DietFragment) {
                     enableCollapsing();
+
+                    getSupportFragmentManager().popBackStack(DietListFragment.TAG, 0);
+                } else {
+                    getSupportFragmentManager().popBackStack();
                 }
             } else {
                 super.onBackPressed();
@@ -163,6 +183,16 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     public void disableCollapsing() {
         mImageView.setVisibility(View.GONE);
         mCollapsingToolbar.setTitleEnabled(false);
+        mAppBar.setExpanded(false, false);
+    }
+
+    @Override
+    public void checkDrawerMenuItem(String name) {
+        // TODO: get rid of this hardcoded strings.
+        if (name.equals("Shock Diets")) mDrawer.setCheckedItem(R.id.navigation_item_1);
+        if (name.equals("Popular Diets")) mDrawer.setCheckedItem(R.id.navigation_item_2);
+        if (name.equals("Regional Slimming Diets")) mDrawer.setCheckedItem(R.id.navigation_item_3);
+        if (name.equals("Custom Diets")) mDrawer.setCheckedItem(R.id.navigation_item_4);
     }
 
     @Override
@@ -174,11 +204,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     public void enableCollapsing() {
         mImageView.setVisibility(View.VISIBLE);
         mCollapsingToolbar.setTitleEnabled(true);
-
-        android.support.v7.widget.Toolbar.LayoutParams params = (android.support.v7.widget.Toolbar.LayoutParams) mToolbarLogo.getLayoutParams();
-        params.gravity = Gravity.CENTER;
-        mToolbarLogo.setLayoutParams(params);
-        mToolbarLogo.invalidate();
+        mAppBar.setExpanded(true, false);
     }
 
     @Override

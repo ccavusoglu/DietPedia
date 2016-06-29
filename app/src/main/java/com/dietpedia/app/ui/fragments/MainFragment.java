@@ -110,13 +110,17 @@ public class MainFragment extends Fragment implements MainView {
         android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
 
-        ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info(), null), DietListFragment.TAG);
+        ft.replace(R.id.main_content, DietListFragment.newInstance(category.name(), category.info()), DietListFragment.TAG);
         ft.addToBackStack(DietListFragment.TAG);
+
+        mListener.checkDrawerMenuItem(category.name());
 
         ft.commit();
     }
 
     public interface Listener {
         void disableCollapsing();
+
+        void checkDrawerMenuItem(String name);
     }
 }

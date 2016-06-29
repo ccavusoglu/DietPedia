@@ -87,12 +87,7 @@ public class DietFragment extends Fragment implements DietView {
         ((MainActivity) getActivity()).getCollapsingToolbar().setTitle("Detail");
 
         ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
-//        a.setVisibility(View.INVISIBLE);
-
-//        android.support.v7.widget.Toolbar.LayoutParams params = (android.support.v7.widget.Toolbar.LayoutParams) a.getLayoutParams();
-//        params.gravity = Gravity.CENTER;
-//        a.setLayoutParams(params);
-//        a.invalidate();
+        a.setVisibility(View.INVISIBLE);
     }
 
     @Override
