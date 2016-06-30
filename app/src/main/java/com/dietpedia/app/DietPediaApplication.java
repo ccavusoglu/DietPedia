@@ -6,6 +6,7 @@ import com.dietpedia.app.data.DataManager;
 import com.dietpedia.app.infrastructure.di.DaggerDietPediaComponent;
 import com.dietpedia.app.infrastructure.di.DietPediaComponent;
 import com.dietpedia.app.infrastructure.di.DietPediaModule;
+import com.dietpedia.app.util.Utils;
 import hugo.weaving.DebugLog;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
@@ -29,6 +30,8 @@ public class DietPediaApplication extends Application {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        Utils.setTypefaces(this);
 
         mainComponent = DaggerDietPediaComponent.builder().dietPediaModule(new DietPediaModule(this)).build();
 

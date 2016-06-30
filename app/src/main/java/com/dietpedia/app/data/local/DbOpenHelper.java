@@ -138,7 +138,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .order(2)
                     .build());
             db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
-                    .name("Diet 2")
+                    .name("Diet 20")
                     .categoryId(categoryId1)
                     .info("INFO HERE")
                     .breakfast("breakfast")

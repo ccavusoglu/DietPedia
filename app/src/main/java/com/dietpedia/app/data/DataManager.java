@@ -47,7 +47,7 @@ public class DataManager {
         return mDatabaseHelper.getCustomDietList(query);
     }
 
-    public Observable<Diet> getDiet(String index) {
-        return mDatabaseHelper.getDiet(index);
+    public Observable<Diet> getDiet(String name) {
+        return mDatabaseHelper.getDiet(name);
     }
 }
