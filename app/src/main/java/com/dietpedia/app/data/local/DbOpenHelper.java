@@ -30,13 +30,13 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             // TODO: read all from json
             long categoryId = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
                     .name("Shock Diets")
-                    .info("INFO HERE")
+                    .info("INFO HEREE")
                     .order(1)
                     .build());
             db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
                     .name("Diet 1")
                     .categoryId(categoryId)
-                    .info("INFO HERE")
+                    .info("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEINFO HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEINFO HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
                     .breakfast("breakfast")
                     .lunch("lunch")
                     .dinner("dinner")

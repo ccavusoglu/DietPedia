@@ -167,8 +167,6 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
                     getSupportFragmentManager().popBackStack(MainFragment.TAG, 0);
                 } else if (fragment instanceof DietFragment) {
-                    enableCollapsing();
-
                     getSupportFragmentManager().popBackStack(DietListFragment.TAG, 0);
                 } else {
                     getSupportFragmentManager().popBackStack();

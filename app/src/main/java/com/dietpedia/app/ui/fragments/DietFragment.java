@@ -1,5 +1,6 @@
 package com.dietpedia.app.ui.fragments;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -22,6 +23,7 @@ import com.dietpedia.app.ui.activities.MainActivity;
 import com.dietpedia.app.ui.views.DietView;
 import com.dietpedia.app.util.Utils;
 import hugo.weaving.DebugLog;
+import org.w3c.dom.Text;
 
 import javax.inject.Inject;
 
@@ -100,67 +102,83 @@ public class DietFragment extends Fragment implements DietView {
     @Override
     public void showDiet(Diet diet) {
         mTitle = diet.name();
+        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        int margin = Utils.dpToPx(8);
+        params.setMargins(margin, margin, margin, margin);
+
+        CardView infoCv = (CardView) mLayout.findViewById(R.id.cv_diet_info);
+        TextView infoTxt = (TextView) infoCv.findViewById(R.id.diet_info);
+        infoTxt.setText(diet.info());
+        infoTxt.setTypeface(Utils.FONTTYPE_REGULAR);
 
         LayoutInflater inflater = LayoutInflater.from((Context) mListener);
         CardView cardViewBreakfast = (CardView) inflater.inflate(R.layout.cardview_meal, mLayout, false);
+        cardViewBreakfast.setLayoutParams(params);
 
         TextView breakfast = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal);
         breakfast.setText("Breakfast");
-        breakfast.setTypeface(Utils.typeBold);
+        breakfast.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView breakfastDesc = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_desc);
         breakfastDesc.setText(diet.breakfast());
-        breakfastDesc.setTypeface(Utils.typeRegular);
+        breakfastDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView breakfastSnack1 = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_snack1_desc);
         breakfastSnack1.setText(diet.snack1());
-        breakfastSnack1.setTypeface(Utils.typeRegular);
+        breakfastSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView breakfastSnack2 = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_snack2_desc);
         breakfastSnack2.setText(diet.snack2());
-        breakfastSnack2.setTypeface(Utils.typeRegular);
+        breakfastSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
-        mLayout.addView(cardViewBreakfast, 0);
+        mLayout.addView(cardViewBreakfast, 1);
 
         CardView cardViewLunch = (CardView) inflater.inflate(R.layout.cardview_meal, mLayout, false);
+        cardViewLunch.setLayoutParams(params);
 
         TextView lunch = (TextView) cardViewLunch.findViewById(R.id.cv_meal);
         lunch.setText("Lunch");
-        lunch.setTypeface(Utils.typeBold);
+        lunch.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView lunchDesc = (TextView) cardViewLunch.findViewById(R.id.cv_meal_desc);
         lunchDesc.setText(diet.lunch());
-        lunchDesc.setTypeface(Utils.typeRegular);
+        lunchDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView lunchSnack1 = (TextView) cardViewLunch.findViewById(R.id.cv_meal_snack1_desc);
         lunchSnack1.setText(diet.snack3());
-        lunchSnack1.setTypeface(Utils.typeRegular);
+        lunchSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView lunchSnack2 = (TextView) cardViewLunch.findViewById(R.id.cv_meal_snack2_desc);
         lunchSnack2.setText(diet.snack4());
-        lunchSnack2.setTypeface(Utils.typeRegular);
+        lunchSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
-        mLayout.addView(cardViewLunch, 1);
+        mLayout.addView(cardViewLunch, 2);
 
         CardView cardViewDinner = (CardView) inflater.inflate(R.layout.cardview_meal, mLayout, false);
+        cardViewDinner.setLayoutParams(params);
 
         TextView dinner = (TextView) cardViewDinner.findViewById(R.id.cv_meal);
         dinner.setText("Dinner");
-        dinner.setTypeface(Utils.typeBold);
+        dinner.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView dinnerDesc = (TextView) cardViewDinner.findViewById(R.id.cv_meal_desc);
         dinnerDesc.setText(diet.dinner());
-        dinnerDesc.setTypeface(Utils.typeRegular);
+        dinnerDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView dinnerSnack1 = (TextView) cardViewDinner.findViewById(R.id.cv_meal_snack1_desc);
         dinnerSnack1.setText(diet.snack5());
-        dinnerSnack1.setTypeface(Utils.typeRegular);
+        dinnerSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView dinnerSnack2 = (TextView) cardViewDinner.findViewById(R.id.cv_meal_snack2_desc);
         dinnerSnack2.setText(diet.snack6());
-        dinnerSnack2.setTypeface(Utils.typeRegular);
+        dinnerSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
-        mLayout.addView(cardViewDinner, 2);
+        mLayout.addView(cardViewDinner, 3);
     }
 
     public interface Listener {

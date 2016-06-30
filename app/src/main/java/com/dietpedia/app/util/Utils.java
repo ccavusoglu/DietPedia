@@ -15,14 +15,16 @@ public class Utils {
     public static String BOLD_FONT = "fonts/Roboto-Bold.ttf";
     public static String THIN_FONT = "fonts/Roboto-Thin.ttf";
     public static String LIGHT_FONT = "fonts/Roboto-Light.ttf";
-    public static Typeface typeRegular;
-    public static Typeface typeBold;
+    public static Typeface FONTTYPE_REGULAR;
+    public static Typeface FONTTYPE_BOLD;
+    public static Typeface FONTTYPE_LIGHT;
     private static int screenWidth = 0;
     private static int screenHeight = 0;
 
     public static void setTypefaces(Context context) {
-        typeRegular = Typeface.createFromAsset(context.getAssets(), Utils.BOLD_FONT);
-        typeBold = Typeface.createFromAsset(context.getAssets(), Utils.REGULAR_FONT);
+        FONTTYPE_BOLD = Typeface.createFromAsset(context.getAssets(), Utils.BOLD_FONT);
+        FONTTYPE_REGULAR = Typeface.createFromAsset(context.getAssets(), Utils.REGULAR_FONT);
+        FONTTYPE_LIGHT = Typeface.createFromAsset(context.getAssets(), Utils.LIGHT_FONT);
     }
 
     public static int dpToPx(int dp) {
