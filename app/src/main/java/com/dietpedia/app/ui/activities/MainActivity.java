@@ -6,14 +6,17 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
@@ -22,26 +25,36 @@ import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.ui.fragments.MainFragment;
 import com.dietpedia.app.util.Utils;
+import com.jakewharton.rxbinding.widget.RxSearchView;
 import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
+import rx.android.schedulers.AndroidSchedulers;
+import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, AboutFragment.Listener,
-                                                          NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
-    public static final  String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
-    private static final int    ANIM_DURATION_TOOLBAR    = 300;
-    private static final int    ANIM_DURATION_FAB        = 400;
+import java.util.concurrent.TimeUnit;
 
-    @Bind(R.id.app_bar)            Toolbar                 mToolbar;
-    @Bind(R.id.app_bar_logo)       ImageView               mToolbarLogo;
-    @Bind(R.id.main_drawer)        NavigationView          mDrawer;
-    @Bind(R.id.activity_main_dl)   DrawerLayout            mDrawerLayout;
-    @Bind(R.id.collapsing_image)   ImageView               mImageView;
+public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
+                                                          AboutFragment.Listener, NavigationView.OnNavigationItemSelectedListener,
+                                                          SearchView.OnQueryTextListener {
+    public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
+    private static final int ANIM_DURATION_TOOLBAR = 300;
+    private static final int ANIM_DURATION_FAB = 400;
+
+    @Bind(R.id.app_bar) Toolbar mToolbar;
+    @Bind(R.id.app_bar_logo) ImageView mToolbarLogo;
+    @Bind(R.id.main_drawer) NavigationView mDrawer;
+    @Bind(R.id.activity_main_dl) DrawerLayout mDrawerLayout;
+    @Bind(R.id.collapsing_image) ImageView mImageView;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
-    @Bind(R.id.appbar)             AppBarLayout            mAppBar;
+    @Bind(R.id.appbar) AppBarLayout mAppBar;
     //    private MenuItem              mSearchMenuItem;
     //    private SearchView            mSearchView;
-    private                        ActionBarDrawerToggle   mDrawerToggle;
-    private                        boolean                 pendingIntroAnimation;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private boolean pendingIntroAnimation;
+
+    private MenuItem mSearchMenuItem;
+    private SearchView mSearchView;
+    private ArrayAdapter<String> mSearchAdapter;
 
     public ImageView getToolbarLogo() {
         return mToolbarLogo;
@@ -70,22 +83,26 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         mDrawer.inflateHeaderView(R.layout.common_drawer_header);
         mDrawer.getHeaderView(0).setVisibility(View.GONE);
 
+        // Search
+        mSearchAdapter = new ArrayAdapter<String>(this, R.layout.search_dropdown_item);
+
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
 
             mDrawer.setCheckedItem(R.id.navigation_item_0);
-            getSupportFragmentManager().beginTransaction().addToBackStack(MainFragment.TAG).replace(R.id.main_content, MainFragment.newInstance()).commit();
+            getSupportFragmentManager().beginTransaction().addToBackStack(MainFragment.TAG).replace(R.id.main_content, MainFragment.newInstance())
+                                       .commit();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        //        getMenuInflater().inflate(R.menu.menu_main, menu);
-        //
-        //        mSearchMenuItem = menu.findItem(R.id.action_search);
-        //        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
-        //        mSearchView.setOnQueryTextListener(this);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        mSearchMenuItem = menu.findItem(R.id.action_search);
+        mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
+        mSearchView.setOnQueryTextListener(this);
 
         if (pendingIntroAnimation) {
             pendingIntroAnimation = false;
@@ -213,6 +230,30 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Override
     public boolean onQueryTextChange(String query) {
         query = query.toLowerCase();
+        Timber.d(query);
+
+        RxSearchView.queryTextChanges(mSearchView)
+                    .skip(1)
+                    .doOnNext(charSequence -> Timber.d("searching: " + charSequence))
+                    .throttleLast(200, TimeUnit.MILLISECONDS)
+                    .debounce(400, TimeUnit.MILLISECONDS)
+                    .onBackpressureLatest()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .filter(charSequence -> {
+                        final boolean empty = TextUtils.isEmpty(charSequence);
+                        if (empty) {
+                            Timber.d("empty view");
+                            mSearchAdapter.clear();
+                        }
+                        return !empty;
+                    })
+                    .doOnNext(charSequence ->                         Timber.d("got data"))
+                    .subscribe(response -> {
+                        mSearchAdapter.add(response.toString());
+                    }, throwable -> {
+                        throwable.printStackTrace();
+                        // nothing
+                    });
 
         return false;
     }
