@@ -73,6 +73,13 @@ public class DatabaseHelper {
         return db.createQuery(Db.DietTable.TABLE_NAME, QUERY).mapToOne(Diet.MAP);
     }
 
+    public Observable<List<Diet>> getDiets(String query) {
+        final String QUERY =
+                "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE " + Db.DietTable.COLUMN_NAME + " like '%" + query + "%'" + " LIMIT 4";
+
+        return db.createQuery(Db.DietTable.TABLE_NAME, QUERY).mapToList(Diet.MAP);
+    }
+
     public Observable<Category> saveCategory(final Category category) {
         return null;
     }

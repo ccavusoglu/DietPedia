@@ -1,25 +1,31 @@
 package com.dietpedia.app.ui.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
+import com.dietpedia.app.domain.model.Diet;
+import com.dietpedia.app.presentation.presenters.MainPresenter;
+import com.dietpedia.app.ui.adapters.SearchAdapter;
 import com.dietpedia.app.ui.fragments.AboutFragment;
 import com.dietpedia.app.ui.fragments.DietFragment;
 import com.dietpedia.app.ui.fragments.DietListFragment;
@@ -28,33 +34,41 @@ import com.dietpedia.app.util.Utils;
 import com.jakewharton.rxbinding.widget.RxSearchView;
 import com.squareup.picasso.Picasso;
 import hugo.weaving.DebugLog;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import timber.log.Timber;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener,
-                                                          AboutFragment.Listener, NavigationView.OnNavigationItemSelectedListener,
-                                                          SearchView.OnQueryTextListener {
-    public static final String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
-    private static final int ANIM_DURATION_TOOLBAR = 300;
-    private static final int ANIM_DURATION_FAB = 400;
+public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, AboutFragment.Listener,
+                                                          NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
+    public static final  String ACTION_SHOW_LOADING_ITEM = "action_show_loading_item";
+    private static final int    ANIM_DURATION_TOOLBAR    = 300;
+    private static final int    ANIM_DURATION_FAB        = 400;
 
-    @Bind(R.id.app_bar) Toolbar mToolbar;
-    @Bind(R.id.app_bar_logo) ImageView mToolbarLogo;
-    @Bind(R.id.main_drawer) NavigationView mDrawer;
-    @Bind(R.id.activity_main_dl) DrawerLayout mDrawerLayout;
-    @Bind(R.id.collapsing_image) ImageView mImageView;
+    @Bind(R.id.app_bar)            Toolbar                 mToolbar;
+    @Bind(R.id.app_bar_logo)       ImageView               mToolbarLogo;
+    @Bind(R.id.main_drawer)        NavigationView          mDrawer;
+    @Bind(R.id.activity_main_dl)   DrawerLayout            mDrawerLayout;
+    @Bind(R.id.collapsing_image)   ImageView               mImageView;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
-    @Bind(R.id.appbar) AppBarLayout mAppBar;
+    @Bind(R.id.appbar)             AppBarLayout            mAppBar;
+
+    @Inject MainPresenter mMainPresenter;
+
     //    private MenuItem              mSearchMenuItem;
     //    private SearchView            mSearchView;
     private ActionBarDrawerToggle mDrawerToggle;
-    private boolean pendingIntroAnimation;
+    private boolean               pendingIntroAnimation;
 
-    private MenuItem mSearchMenuItem;
-    private SearchView mSearchView;
-    private ArrayAdapter<String> mSearchAdapter;
+    private MenuItem      mSearchMenuItem;
+    private SearchView    mSearchView;
+    private SearchAdapter mSearchAdapter;
 
     public ImageView getToolbarLogo() {
         return mToolbarLogo;
@@ -84,14 +98,13 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         mDrawer.getHeaderView(0).setVisibility(View.GONE);
 
         // Search
-        mSearchAdapter = new ArrayAdapter<String>(this, R.layout.search_dropdown_item);
+        mSearchAdapter = new SearchAdapter(this);
 
         if (savedInstanceState == null) {
             pendingIntroAnimation = true;
 
             mDrawer.setCheckedItem(R.id.navigation_item_0);
-            getSupportFragmentManager().beginTransaction().addToBackStack(MainFragment.TAG).replace(R.id.main_content, MainFragment.newInstance())
-                                       .commit();
+            getSupportFragmentManager().beginTransaction().addToBackStack(MainFragment.TAG).replace(R.id.main_content, MainFragment.newInstance()).commit();
         }
     }
 
@@ -100,9 +113,13 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         mSearchMenuItem = menu.findItem(R.id.action_search);
+
         mSearchView = (SearchView) MenuItemCompat.getActionView(mSearchMenuItem);
         mSearchView.setOnQueryTextListener(this);
+        mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
         if (pendingIntroAnimation) {
             pendingIntroAnimation = false;
@@ -184,7 +201,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
                     getSupportFragmentManager().popBackStack(MainFragment.TAG, 0);
                 } else if (fragment instanceof DietFragment) {
-                    getSupportFragmentManager().popBackStack(DietListFragment.TAG, 0);
+                    getSupportFragmentManager().popBackStack(MainFragment.TAG, 0);
                 } else {
                     getSupportFragmentManager().popBackStack();
                 }
@@ -224,41 +241,108 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+        return true;
     }
 
     @Override
     public boolean onQueryTextChange(String query) {
-        query = query.toLowerCase();
+        //        query = query.toLowerCase();
         Timber.d(query);
 
+        // TODO: split rx chain to use presenter
         RxSearchView.queryTextChanges(mSearchView)
-                    .skip(1)
-                    .doOnNext(charSequence -> Timber.d("searching: " + charSequence))
-                    .throttleLast(200, TimeUnit.MILLISECONDS)
-                    .debounce(400, TimeUnit.MILLISECONDS)
-                    .onBackpressureLatest()
+                    .throttleLast(100, TimeUnit.MILLISECONDS)
+                    .debounce(200, TimeUnit.MILLISECONDS)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .filter(charSequence -> {
-                        final boolean empty = TextUtils.isEmpty(charSequence);
-                        if (empty) {
-                            Timber.d("empty view");
+                    .doOnNext(new Action1<CharSequence>() {
+            @Override
+            public void call(CharSequence charSequence) {
+                Timber.d("searching: " + charSequence);
+            }
+        }).flatMap(new Func1<CharSequence, Observable<List<Diet>>>() {
+            @Override
+            public Observable<List<Diet>> call(CharSequence charSequence) {
+                Timber.d("flatMap: " + charSequence);
+                return mMainPresenter.searchDiets(charSequence.toString());
+            }
+        }).map(new Func1<List<Diet>, List<String>>() {
+            @Override
+            public List<String> call(List<Diet> diets) {
+                Timber.d("map: " + diets.size());
+                List<String> res = new ArrayList<String>();
+
+                for (Diet diet : diets) {
+                    res.add(diet.name());
+                }
+
+                return res;
+            }
+        }).filter(new Func1<List<String>, Boolean>() {
+            @Override
+            public Boolean call(List<String> results) {
+                final boolean empty = results.isEmpty();
+                if (empty) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
                             mSearchAdapter.clear();
                         }
-                        return !empty;
-                    })
-                    .doOnNext(charSequence ->                         Timber.d("got data"))
-                    .subscribe(response -> {
-                        mSearchAdapter.add(response.toString());
-                    }, throwable -> {
-                        throwable.printStackTrace();
-                        // nothing
                     });
+                }
+                return !empty;
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread()).subscribe(new Action1<List<String>>() {
+            @Override
+            public void call(final List<String> results) {
+                // Cursor
+                String[] columns = new String[]{"_id", "search_item"};
+                Object[] temp = new Object[]{0, "default"};
 
+                final MatrixCursor cursor = new MatrixCursor(columns);
+
+                for (int i = 0; i < results.size(); i++) {
+                    temp[0] = i;
+                    temp[1] = results.get(i);
+                    cursor.addRow(temp);
+                }
+
+                // SearchView
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mSearchAdapter.changeCursor(cursor);
+                        mSearchAdapter.setItems(results);
+
+                        mSearchView.setSuggestionsAdapter(mSearchAdapter);
+                    }
+                });
+
+                //                mSearchAdapter.addAll(results);
+                //                mSearchAdapter.notifyDataSetChanged();
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                throwable.printStackTrace();
+                // nothing
+            }
+        });
         return false;
     }
 
     public CollapsingToolbarLayout getCollapsingToolbar() {
         return mCollapsingToolbar;
+    }
+
+    public void searchResultClick(String s) {
+        mSearchView.clearFocus();
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+        ft.replace(R.id.main_content, DietFragment.newInstance(s), DietFragment.TAG);
+        ft.addToBackStack(DietFragment.TAG);
+
+        ft.commit();
     }
 }

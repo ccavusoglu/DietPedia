@@ -4,8 +4,9 @@ import android.app.Application;
 import com.dietpedia.app.DietPediaApplication;
 import com.dietpedia.app.data.DataManager;
 import com.dietpedia.app.domain.model.Category;
+import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.ui.views.MainView;
-import hugo.weaving.DebugLog;
+import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -56,5 +57,9 @@ public class MainPresenter extends BasePresenter<MainView> {
                 }
             }
         });
+    }
+
+    public Observable<List<Diet>> searchDiets(String query) {
+        return mDataManager.getDiets(query);
     }
 }

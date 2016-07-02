@@ -7,11 +7,11 @@
     <ImageView
             android:id="@android:id/icon1"
             style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1"
-            android:layout_width="@dimen/abc_dropdownitem_icon_width"
-            android:layout_height="48dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_cake_black_48dp"
+            android:src="@drawable/strawberry_48"
             android:scaleType="centerInside" />
 
     <TextView

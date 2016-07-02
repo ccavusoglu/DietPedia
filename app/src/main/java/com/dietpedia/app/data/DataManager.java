@@ -50,4 +50,8 @@ public class DataManager {
     public Observable<Diet> getDiet(String name) {
         return mDatabaseHelper.getDiet(name);
     }
+
+    public Observable<List<Diet>> getDiets(String query) {
+        return mDatabaseHelper.getDiets(query);
+    }
 }
