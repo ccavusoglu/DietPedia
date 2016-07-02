@@ -3,6 +3,7 @@ package com.dietpedia.app.presentation.presenters;
 import android.app.Application;
 import com.dietpedia.app.DietPediaApplication;
 import com.dietpedia.app.data.DataManager;
+import com.dietpedia.app.data.local.Db;
 import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.ui.views.DietListView;
 import hugo.weaving.DebugLog;

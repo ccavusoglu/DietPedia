@@ -19,6 +19,7 @@ public class DatabaseHelper {
     private BriteDatabase db;
     private static String ALIAS_CATEGORY = "c";
     private static String ALIAS_DIET = "d";
+    private static String ALIAS_DIETDETAIL = "dd";
 
     @DebugLog
     public DatabaseHelper(Context context) {
