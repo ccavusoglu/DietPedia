@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -58,17 +59,19 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Bind(R.id.collapsing_image)   ImageView               mImageView;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
     @Bind(R.id.appbar)             AppBarLayout            mAppBar;
-
+    @Bind(R.id.main_tabs) TabLayout mTabLayout;
     @Inject MainPresenter mMainPresenter;
-
     //    private MenuItem              mSearchMenuItem;
     //    private SearchView            mSearchView;
     private ActionBarDrawerToggle mDrawerToggle;
     private boolean               pendingIntroAnimation;
-
     private MenuItem      mSearchMenuItem;
     private SearchView    mSearchView;
     private SearchAdapter mSearchAdapter;
+
+    public TabLayout getTabLayout() {
+        return mTabLayout;
+    }
 
     public ImageView getToolbarLogo() {
         return mToolbarLogo;
@@ -214,6 +217,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Override
     public void disableCollapsing() {
         mImageView.setVisibility(View.GONE);
+        mTabLayout.setVisibility(View.GONE);
         mCollapsingToolbar.setTitleEnabled(false);
         mAppBar.setExpanded(false, false);
     }
@@ -235,6 +239,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Override
     public void enableCollapsing() {
         mImageView.setVisibility(View.VISIBLE);
+        mTabLayout.setVisibility(View.VISIBLE);
         mCollapsingToolbar.setTitleEnabled(true);
         mAppBar.setExpanded(true, false);
     }
@@ -250,11 +255,8 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         Timber.d(query);
 
         // TODO: split rx chain to use presenter
-        RxSearchView.queryTextChanges(mSearchView)
-                    .throttleLast(100, TimeUnit.MILLISECONDS)
-                    .debounce(200, TimeUnit.MILLISECONDS)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext(new Action1<CharSequence>() {
+        RxSearchView.queryTextChanges(mSearchView).throttleLast(100, TimeUnit.MILLISECONDS).debounce(200, TimeUnit.MILLISECONDS)
+                    .observeOn(AndroidSchedulers.mainThread()).doOnNext(new Action1<CharSequence>() {
             @Override
             public void call(CharSequence charSequence) {
                 Timber.d("searching: " + charSequence);

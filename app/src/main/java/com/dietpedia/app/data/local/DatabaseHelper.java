@@ -69,9 +69,31 @@ public class DatabaseHelper {
 
     public Observable<Diet> getDiet(String name) {
         final String QUERY =
-                "" + "SELECT * FROM " + Db.DietTable.TABLE_NAME + " WHERE " + Db.DietTable.COLUMN_NAME + " = '" + name + "'";
+                "" + "SELECT "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_CATEGORYID + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_INFO + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_ID + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_NAME + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_INFO + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_DIETID + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_BREAKFAST + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_LUNCH + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_DINNER + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK1 + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK2 + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK3 + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK4 + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK5 + ", "
+                + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_SNACK6
+                + " FROM " + Db.DietTable.TABLE_NAME + " AS " + ALIAS_DIET
+                + " LEFT OUTER JOIN " + Db.DietDetailTable.TABLE_NAME + " AS " + ALIAS_DIETDETAIL
+                    + " ON " + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + " = " + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_DIETID
+                +
+                        " WHERE " + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + " = '" + name + "'";
 
-        return db.createQuery(Db.DietTable.TABLE_NAME, QUERY).mapToOne(Diet.MAP);
+        return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.DietDetailTable.TABLE_NAME), QUERY).mapToOne(Diet.MAP_DETAIL);
     }
 
     public Observable<List<Diet>> getDiets(String query) {

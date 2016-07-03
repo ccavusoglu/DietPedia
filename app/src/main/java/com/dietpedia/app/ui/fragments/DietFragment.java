@@ -1,10 +1,10 @@
 package com.dietpedia.app.ui.fragments;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -20,10 +20,10 @@ import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.presentation.presenters.DietPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.activities.MainActivity;
+import com.dietpedia.app.ui.adapters.DietPagerAdapter;
 import com.dietpedia.app.ui.views.DietView;
 import com.dietpedia.app.util.Utils;
 import hugo.weaving.DebugLog;
-import org.w3c.dom.Text;
 
 import javax.inject.Inject;
 
@@ -31,14 +31,15 @@ import javax.inject.Inject;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class DietFragment extends Fragment implements DietView {
-    public static final String TAG = "DietFragment";
+    public static final String TAG       = "DietFragment";
     public static final String KEY_INDEX = "index";
 
-    @Bind(R.id.fragment_diet_layout) LinearLayout mLayout;
-    @Inject DietPresenter mPresenter;
+    @Bind(R.id.fragment_diet_layout) LinearLayout  mLayout;
+    @Bind(R.id.fragment_diet_vp)     ViewPager     mViewPager;
+    @Inject                          DietPresenter mPresenter;
 
     private Listener mListener;
-    private String mTitle;
+    private String   mTitle;
 
     public static DietFragment newInstance(String index) {
         DietFragment fragment = new DietFragment();
@@ -81,6 +82,17 @@ public class DietFragment extends Fragment implements DietView {
         mListener.enableCollapsing();
         // TODO: custom diet images
         mListener.loadBackdrop(R.drawable.diet1);
+
+        setupViewPager(mViewPager);
+        ((MainActivity) getActivity()).getTabLayout().setupWithViewPager(mViewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        DietPagerAdapter adapter = new DietPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(new DietDetailFragment(), "Day 1");
+        adapter.addFragment(new DietDetailFragment(), "Day 2");
+        adapter.addFragment(new DietDetailFragment(), "Day 3");
+        viewPager.setAdapter(adapter);
     }
 
     // TODO: set title when diet loaded!
@@ -101,13 +113,12 @@ public class DietFragment extends Fragment implements DietView {
 
     @Override
     public void showDiet(Diet diet) {
+//        setupViewPager(mViewPager);
+
         mTitle = diet.name();
         ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         int margin = Utils.dpToPx(8);
         params.setMargins(margin, margin, margin, margin);
 
@@ -125,15 +136,15 @@ public class DietFragment extends Fragment implements DietView {
         breakfast.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView breakfastDesc = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_desc);
-        breakfastDesc.setText(diet.breakfast());
+        breakfastDesc.setText(diet.dietDetails().get(0).breakfast());
         breakfastDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView breakfastSnack1 = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_snack1_desc);
-        breakfastSnack1.setText(diet.snack1());
+        breakfastSnack1.setText(diet.dietDetails().get(0).snack1());
         breakfastSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView breakfastSnack2 = (TextView) cardViewBreakfast.findViewById(R.id.cv_meal_snack2_desc);
-        breakfastSnack2.setText(diet.snack2());
+        breakfastSnack2.setText(diet.dietDetails().get(0).snack2());
         breakfastSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
         mLayout.addView(cardViewBreakfast, 1);
@@ -146,15 +157,15 @@ public class DietFragment extends Fragment implements DietView {
         lunch.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView lunchDesc = (TextView) cardViewLunch.findViewById(R.id.cv_meal_desc);
-        lunchDesc.setText(diet.lunch());
+        lunchDesc.setText(diet.dietDetails().get(0).lunch());
         lunchDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView lunchSnack1 = (TextView) cardViewLunch.findViewById(R.id.cv_meal_snack1_desc);
-        lunchSnack1.setText(diet.snack3());
+        lunchSnack1.setText(diet.dietDetails().get(0).snack3());
         lunchSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView lunchSnack2 = (TextView) cardViewLunch.findViewById(R.id.cv_meal_snack2_desc);
-        lunchSnack2.setText(diet.snack4());
+        lunchSnack2.setText(diet.dietDetails().get(0).snack4());
         lunchSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
         mLayout.addView(cardViewLunch, 2);
@@ -167,15 +178,15 @@ public class DietFragment extends Fragment implements DietView {
         dinner.setTypeface(Utils.FONTTYPE_BOLD);
 
         TextView dinnerDesc = (TextView) cardViewDinner.findViewById(R.id.cv_meal_desc);
-        dinnerDesc.setText(diet.dinner());
+        dinnerDesc.setText(diet.dietDetails().get(0).dinner());
         dinnerDesc.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView dinnerSnack1 = (TextView) cardViewDinner.findViewById(R.id.cv_meal_snack1_desc);
-        dinnerSnack1.setText(diet.snack5());
+        dinnerSnack1.setText(diet.dietDetails().get(0).snack5());
         dinnerSnack1.setTypeface(Utils.FONTTYPE_LIGHT);
 
         TextView dinnerSnack2 = (TextView) cardViewDinner.findViewById(R.id.cv_meal_snack2_desc);
-        dinnerSnack2.setText(diet.snack6());
+        dinnerSnack2.setText(diet.dietDetails().get(0).snack6());
         dinnerSnack2.setTypeface(Utils.FONTTYPE_LIGHT);
 
         mLayout.addView(cardViewDinner, 3);

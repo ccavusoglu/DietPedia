@@ -67,13 +67,12 @@ public class Db {
         }
     }
 
-
     public static abstract class DietDetailTable {
         public static final String TABLE_NAME = "dietDetail";
 
-        public static final String COLUMN_ID = "_id";
-        public static final String COLUMN_NAME = "name";
-        public static final String COLUMN_INFO = "info";
+        public static final String COLUMN_ID = "_id_detail";
+        public static final String COLUMN_NAME = "name_detail";
+        public static final String COLUMN_INFO = "info_detail";
         public static final String COLUMN_DIETID = "dietId";
         public static final String COLUMN_BREAKFAST = "breakfast";
         public static final String COLUMN_LUNCH = "lunch";
