@@ -261,7 +261,7 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return true;
+        return false;
     }
 
     @Override

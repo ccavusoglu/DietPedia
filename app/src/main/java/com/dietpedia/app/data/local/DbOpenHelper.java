@@ -120,7 +120,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                        "1 cup of tea (sugar-free).")
                     .lunch("200 g of prepared meat or fish.\n" +
                                    "1 tomato.\n")
-                    .dinner("1 toast 0.5 kg prepared veggies (carrots, cauliflower).\n" +
+                    .dinner("1 toast 0.5 kg prepared vegetables (carrots, cauliflower).\n" +
                                     "1 egg.")
                     .build());
 
@@ -148,7 +148,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .lunch("1 yogurt\n" +
                                    "1 cucumber\n" +
                                    "Any amount of greens and 1 bowl of fat-free soup")
-                    .dinner("1 bowl of fat-free veggie soup\n" +
+                    .dinner("1 bowl of fat-free vegetable soup\n" +
                                     "1 yogurt and an apple")
                     .snack1("One apple")
                     .build());
@@ -176,8 +176,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                    "Greens salad" +
                                    "100 g of boiled meat or fish\n" +
                                    "1 fat-free yogurt")
-                    .dinner("Fat/Salt-free veggie soup\n" +
-                                    "Salad and fat-free boiled or raw veggies")
+                    .dinner("Fat/Salt-free vegetable soup\n" +
+                                    "Salad and fat-free boiled or raw vegetables")
                     .snack1("1 cup of fat-free milk\n" +
                                     "Handful of cereal")
                     .snack3("1 cup of green tea (sugar-free)\n" +
@@ -290,12 +290,12 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .breakfast("1 slice of low fat cheese\n" +
                                        "2 slices of wholegrain bread\n" +
                                        "Lettuce, parsley and rocket with lots of lemon")
-                    .lunch("Any low-fat veggie food\n" +
+                    .lunch("Any low-fat vegetable dish\n" +
                                    "1 yogurt\n" +
                                    "Green salad")
                     .dinner("Low fat soup\n" +
                                     "1 slice of wholemeal bread\n" +
-                                    "Any low-fat veggie food\n" +
+                                    "Any low-fat vegetable dish\n" +
                                     "Green salad\n" +
                                     "1 low-fat yogurt\n")
                     .snack1("Green tea")
@@ -339,7 +339,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .lunch("Chicken salad")
                     .dinner("Grilled meat\n" +
                                     "1 yogurt\n" +
-                                    "Boiled veggies")
+                                    "Boiled vegetables")
                     .snack1("Grilled cheese")
                     .snack3("1-2 fruits")
                     .build());
@@ -367,7 +367,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                    "1 slice of wholemeal bread\n" +
                                    "Green Salad\n" +
                                    "1 fruit")
-                    .dinner("Any low-fat veggie food\n" +
+                    .dinner("Any low-fat vegetable dish\n" +
                                     "Green salad\n" +
                                     "1 fruit")
                     .snack1("1 yogurt\n" +
@@ -388,12 +388,12 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .lunch("1 canned bean\n" +
                                    "2 slices of wholemeal bread\n" +
                                    "1 yogurt\n" +
-                                   "Half a portion veggie food\n" +
+                                   "Half a portion vegetable dish\n" +
                                    "1-2 fruit")
                     .dinner("Grilled fish or chicken\n" +
                                     "100 g baked potato\n" +
                                     "2 slices of wholemeal bread\n" +
-                                    "Raw veggies\n" +
+                                    "Raw vegetables\n" +
                                     "1-2 fruit")
                     .build());
 
@@ -416,7 +416,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                        "Cucumber")
                     .lunch("Low-fat chicken\n" +
                                    "Green salad")
-                    .dinner("Any low-fat veggie food\n" +
+                    .dinner("Any low-fat vegetable dish\n" +
                                     "Salad\n" +
                                     "Yogurt")
                     .build());
@@ -439,7 +439,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
                     .name("Day 1")
                     .dietId(dietId)
-                    .breakfast("2 egg veggie omelet")
+                    .breakfast("2 egg vegetable omelet")
                     .lunch("Tuna salad with or without grilled chicken pieces")
                     .dinner("150 g grilled chicken breast\n" +
                                     "Half boiled potato\n" +
@@ -511,7 +511,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                    "1 grated carrot\n" +
                                    "4 leaf of lettuce\n" +
                                    "1 grated carrot, 2 tablespoon of humus and 1 tablespoon of pine kernel mixed in a bowl")
-                    .dinner("Veggie burger with wholegrain bread including 1 tablespoon of mustardi 3 leaf of lettuce, half a tomato and 2 tablespoon of sliced onion")
+                    .dinner("Vegetable burger with wholegrain bread including 1 tablespoon of mustardi 3 leaf of lettuce, half a tomato and 2 tablespoon of sliced onion")
                     .build());
 
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
@@ -668,7 +668,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                        "For weekends add 2 boiled eggs and a cup of tea (sugar-free)")
                     .lunch("Soup\n" +
                                    "1 yogurt and salad\n" +
-                                   "Any veggie food without potato and 1 toast")
+                                   "Any vegetable dish without potato and 1 toast")
                     .dinner("150-200 g of meat or fish\n" +
                                     "1 yogurt and salad")
                     .snack3("10-15 almonds/peanuts and handful of cereal with yogurt")
@@ -682,7 +682,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
                     .name("Custom Diet 2")
                     .categoryId(categoryId)
-                    .info("Follow this diet only for 7 days.")
+                    .info("Follow this diet for 7 days.")
                     .build());
 
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
@@ -693,10 +693,10 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                                        "4-5 olives\n" +
                                        "Any amount of greens and 2 toast")
                     .lunch("1 soup\n" +
-                                   "Any fat-free veggie food\n" +
+                                   "Any fat-free vegetable dish\n" +
                                    "1 yogurt\n" +
                                    "1 toast")
-                    .dinner("125 g meat or fish or any fat-free veggie food\n" +
+                    .dinner("125 g meat or fish or any fat-free vegetable dish\n" +
                                     "1 yogurt\n" +
                                     "salad and 1 toast")
                     .snack1("An apple or orange")
@@ -712,7 +712,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
                     .name("Custom Diet 3")
                     .categoryId(categoryId)
-                    .info("Follow this diet only for 7 days")
+                    .info("Follow this diet for 7 days")
                     .build());
 
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
@@ -721,7 +721,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .breakfast("2 slices of cheese\n" +
                                        "1 tomato\n" +
                                        "1 toast ")
-                    .lunch("Any fat-free veggie food\n" +
+                    .lunch("Any fat-free vegetable dish\n" +
                                    "1 yogurt\n" +
                                    "1 toast")
                     .dinner("150 g of meat or fish\n" +
@@ -738,7 +738,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
                     .name("Custom Diet 4")
                     .categoryId(categoryId)
-                    .info("Follow this diet only for 7 days.")
+                    .info("Follow this diet for 7 days.")
                     .build());
 
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
@@ -765,7 +765,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
                     .name("Vegetarian Diet")
                     .categoryId(categoryId)
-                    .info("Follow this diet only for 7 days.")
+                    .info("Follow this diet for 7 days.")
                     .build());
 
             db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
@@ -773,7 +773,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .dietId(dietId)
                     .breakfast("A handful of cereal with yogurt")
                     .lunch("Soup\n" +
-                                   "Any fat-free veggie food\n" +
+                                   "Any fat-free vegetable dish\n" +
                                    "1 yogurt\n" +
                                    "1 toast")
                     .dinner("Cheese salad")
