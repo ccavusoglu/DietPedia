@@ -5,16 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.ImageView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
 import com.dietpedia.app.domain.model.Diet;
-import com.dietpedia.app.domain.model.DietDetail;
 import com.dietpedia.app.presentation.presenters.DietPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.activities.MainActivity;
@@ -28,15 +24,16 @@ import javax.inject.Inject;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class DietFragment extends Fragment implements DietView {
-    public static final String TAG       = "DietFragment";
+    public static final String TAG = "DietFragment";
     public static final String KEY_INDEX = "index";
 
-    @Bind(R.id.fragment_diet_vp) ViewPager     mViewPager;
-    @Inject                      DietPresenter mPresenter;
+    @Bind(R.id.fragment_diet_vp) ViewPager mViewPager;
+    @Inject DietPresenter mPresenter;
 
-    private Listener         mListener;
-    private String           mTitle;
+    private Listener mListener;
+    private String mTitle;
     private DietPagerAdapter mAdapter;
+    private DietMainFragment mInfoFrag;
 
     public static DietFragment newInstance(String index) {
         DietFragment fragment = new DietFragment();
@@ -63,6 +60,8 @@ public class DietFragment extends Fragment implements DietView {
 
         mPresenter.attachView(this);
         mPresenter.loadDiet(getArguments().getString(KEY_INDEX));
+
+        ((MainActivity) getActivity()).getSearchView().setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -85,7 +84,9 @@ public class DietFragment extends Fragment implements DietView {
 
     private void setupViewPager(ViewPager viewPager) {
         mAdapter = new DietPagerAdapter(getChildFragmentManager());
-        mAdapter.addFragment(new DietMainFragment(), "INFO");
+        mInfoFrag = DietMainFragment.newInstance(null);
+
+        mAdapter.addFragment(mInfoFrag, "INFO");
         viewPager.setAdapter(mAdapter);
     }
 
@@ -102,28 +103,26 @@ public class DietFragment extends Fragment implements DietView {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.action_search);
+        item.setVisible(false);
     }
 
     @Override
     public void showDiet(Diet diet) {
-        //        setupViewPager(mViewPager);
-
         mTitle = diet.name();
         ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
-        // setup pager etc.
-        if (diet.dietDetails().size() < 2) {
-            ((MainActivity) getActivity()).getTabLayout().setVisibility(View.GONE);
-        } else {
-            for (DietDetail detail : diet.dietDetails()) {
-                ((MainActivity) getActivity()).getTabLayout().setVisibility(View.VISIBLE);
-                mAdapter.addFragment(DietDetailFragment.newInstance(detail), detail.name());
-            }
-            mAdapter.notifyDataSetChanged();
-            ((MainActivity) getActivity()).getTabLayout().setupWithViewPager(mViewPager);
+        mInfoFrag.setContent(diet);
+
+        for (int i = 0; i < diet.dietDetails().size(); i++) {
+            ((MainActivity) getActivity()).getTabLayout().setVisibility(View.VISIBLE);
+            mAdapter.addFragment(DietDetailFragment.newInstance(diet.dietDetails().get(i)), diet.dietDetails().get(i).name());
         }
+
+        // refresh tabLayout and viewPager after loading the content
+        mAdapter.notifyDataSetChanged();
+        ((MainActivity) getActivity()).getTabLayout().setupWithViewPager(mViewPager);
     }
 
     public interface Listener {

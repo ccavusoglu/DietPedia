@@ -18,8 +18,8 @@ import java.util.List;
  */
 public class SearchAdapter extends CursorAdapter {
     private final MainActivity mActivity;
-    private       List<String> mItems;
-    private       TextView     mText;
+    private List<String> mItems;
+    private TextView mText;
 
     public SearchAdapter(Context context) {
         super(context, null, false);
@@ -60,7 +60,7 @@ public class SearchAdapter extends CursorAdapter {
 
         view.setClickable(true);
         mText.setTypeface(Utils.FONTTYPE_REGULAR);
-        mText.setText(mItems.get(cursor.getPosition()));
+        if (mItems.size() > cursor.getPosition()) mText.setText(mItems.get(cursor.getPosition()));
     }
 
     public void clear() {

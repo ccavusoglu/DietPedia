@@ -362,4 +362,8 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
 
         ft.commit();
     }
+
+    public SearchView getSearchView() {
+        return mSearchView;
+    }
 }

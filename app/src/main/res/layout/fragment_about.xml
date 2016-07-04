@@ -33,7 +33,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:text="We do not recommend following any diet found on this app without consulting a dietitian."
+                    android:text="Content provided by this application is only for information purposes.\n\nWe do not recommend following any diet found on this application without consulting a dietitian."
             />
         </LinearLayout>
 

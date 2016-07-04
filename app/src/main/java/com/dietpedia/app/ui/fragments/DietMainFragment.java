@@ -27,18 +27,21 @@ import javax.inject.Inject;
  * Created by Çağatay Çavuşoğlu on 22.06.2016.
  */
 public class DietMainFragment extends Fragment {
-    public static final String TAG       = "DietMainFragment";
+    public static final String TAG = "DietMainFragment";
 
-    @Bind(R.id.fragment_diet_main_layout) LinearLayout  mLayout;
-    @Inject                          DietPresenter mPresenter;
+    @Bind(R.id.fragment_diet_main_layout) LinearLayout mLayout;
+    @Inject DietPresenter mPresenter;
 
-    private String   mTitle;
     private Diet mContent;
 
     public static DietMainFragment newInstance(Diet diet) {
         DietMainFragment fragment = new DietMainFragment();
         fragment.setContent(diet);
         return fragment;
+    }
+
+    public void setContent(Diet diet) {
+        mContent = diet;
     }
 
     @Override
@@ -54,6 +57,7 @@ public class DietMainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_diet_main, container, false);
         ButterKnife.bind(this, view);
 
+        if (mContent != null) showContent();
         return view;
     }
 
@@ -72,22 +76,15 @@ public class DietMainFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showDiet(Diet diet) {
-//        setupViewPager(mViewPager);
-
-        mTitle = diet.name();
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+    public void showContent() {
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         int margin = Utils.dpToPx(8);
         params.setMargins(margin, margin, margin, margin);
 
         CardView infoCv = (CardView) mLayout.findViewById(R.id.cv_diet_info);
         TextView infoTxt = (TextView) infoCv.findViewById(R.id.diet_info);
-        infoTxt.setText(diet.info());
+        infoTxt.setText(mContent.info());
         infoTxt.setTypeface(Utils.FONTTYPE_REGULAR);
-    }
-
-    public void setContent(Diet diet) {
-        mContent = diet;
     }
 }
