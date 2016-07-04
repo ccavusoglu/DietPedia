@@ -3,6 +3,7 @@ package com.dietpedia.app.data.local;
 import android.content.Context;
 import com.dietpedia.app.domain.model.Category;
 import com.dietpedia.app.domain.model.Diet;
+import com.dietpedia.app.domain.model.DietDetail;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 import hugo.weaving.DebugLog;
@@ -31,8 +32,12 @@ public class DatabaseHelper {
 
     public Observable<List<Category>> getCategories() {
         final String QUERY =
-                "" + "SELECT " + Db.CategoryTable.COLUMN_ID + ", " + Db.CategoryTable.COLUMN_NAME + ", " + Db.CategoryTable.COLUMN_INFO + ", " + Db
-                        .CategoryTable.COLUMN_SORT + " FROM " + Db.CategoryTable.TABLE_NAME;
+                "" + "SELECT "
+                        + Db.CategoryTable.COLUMN_ID + ", "
+                        + Db.CategoryTable.COLUMN_NAME + ", "
+                        + Db.CategoryTable.COLUMN_INFO + ", "
+                        + Db.CategoryTable.COLUMN_SORT
+                        + " FROM " + Db.CategoryTable.TABLE_NAME;
 
         return db.createQuery(Db.CategoryTable.TABLE_NAME, QUERY).mapToList(Category.MAP);
     }
@@ -42,7 +47,8 @@ public class DatabaseHelper {
                 "" + "SELECT "
                 + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + ", "
                 + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + ", "
-                + ALIAS_DIET + "." + Db.DietTable.COLUMN_INFO + ""
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_INFO + ", "
+                + ALIAS_DIET + "." + Db.DietTable.COLUMN_CATEGORYID + ""
                 + " FROM " + Db.DietTable.TABLE_NAME + " AS " + ALIAS_DIET
                 + " LEFT OUTER JOIN " + Db.CategoryTable.TABLE_NAME + " AS " + ALIAS_CATEGORY
                         + " ON " + ALIAS_DIET + "." + Db.DietTable.COLUMN_CATEGORYID + " = "
@@ -90,8 +96,7 @@ public class DatabaseHelper {
                 + " FROM " + Db.DietTable.TABLE_NAME + " AS " + ALIAS_DIET
                 + " LEFT OUTER JOIN " + Db.DietDetailTable.TABLE_NAME + " AS " + ALIAS_DIETDETAIL
                     + " ON " + ALIAS_DIET + "." + Db.DietTable.COLUMN_ID + " = " + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_DIETID
-                +
-                        " WHERE " + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + " = '" + name + "'";
+                + " WHERE " + ALIAS_DIET + "." + Db.DietTable.COLUMN_NAME + " = '" + name + "'" + " ORDER BY " + ALIAS_DIETDETAIL + "." + Db.DietDetailTable.COLUMN_ID;
 
         return db.createQuery(Arrays.asList(Db.DietTable.TABLE_NAME, Db.DietDetailTable.TABLE_NAME), QUERY).mapToOne(Diet.MAP_DETAIL);
     }

@@ -44,6 +44,7 @@ import timber.log.Timber;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends BaseActivity implements MainFragment.Listener, DietListFragment.Listener, DietFragment.Listener, AboutFragment.Listener,
@@ -59,15 +60,15 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
     @Bind(R.id.collapsing_image)   ImageView               mImageView;
     @Bind(R.id.collapsing_toolbar) CollapsingToolbarLayout mCollapsingToolbar;
     @Bind(R.id.appbar)             AppBarLayout            mAppBar;
-    @Bind(R.id.main_tabs) TabLayout mTabLayout;
-    @Inject MainPresenter mMainPresenter;
+    @Bind(R.id.main_tabs)          TabLayout               mTabLayout;
+    @Inject                        MainPresenter           mMainPresenter;
     //    private MenuItem              mSearchMenuItem;
     //    private SearchView            mSearchView;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private boolean               pendingIntroAnimation;
-    private MenuItem      mSearchMenuItem;
-    private SearchView    mSearchView;
-    private SearchAdapter mSearchAdapter;
+    private                        ActionBarDrawerToggle   mDrawerToggle;
+    private                        boolean                 pendingIntroAnimation;
+    private                        MenuItem                mSearchMenuItem;
+    private                        SearchView              mSearchView;
+    private                        SearchAdapter           mSearchAdapter;
 
     public TabLayout getTabLayout() {
         return mTabLayout;
@@ -227,13 +228,27 @@ public class MainActivity extends BaseActivity implements MainFragment.Listener,
         // TODO: get rid of this hardcoded strings.
         if (name.equals("Shock Diets")) mDrawer.setCheckedItem(R.id.navigation_item_1);
         if (name.equals("Popular Diets")) mDrawer.setCheckedItem(R.id.navigation_item_2);
-        if (name.equals("Regional Slimming Diets")) mDrawer.setCheckedItem(R.id.navigation_item_3);
+        if (name.equals("Slimming Diets")) mDrawer.setCheckedItem(R.id.navigation_item_3);
         if (name.equals("Custom Diets")) mDrawer.setCheckedItem(R.id.navigation_item_4);
     }
 
     @Override
-    public void loadBackdrop(int resId) {
-        Picasso.with(this).load(resId).resize(512, 512).centerCrop().into(mImageView);
+    public void loadBackdrop() {
+        int resId = 0;
+
+        switch (new Random().nextInt(2)) {
+            case 0:
+                resId = R.drawable.header1;
+                break;
+            case 1:
+                resId = R.drawable.header1;
+                break;
+            default:
+                resId = R.drawable.header1;
+                break;
+        }
+
+        Picasso.with(this).load(resId).into(mImageView);
     }
 
     @Override

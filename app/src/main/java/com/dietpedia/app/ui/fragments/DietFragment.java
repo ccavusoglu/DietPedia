@@ -14,6 +14,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import com.dietpedia.app.R;
 import com.dietpedia.app.domain.model.Diet;
+import com.dietpedia.app.domain.model.DietDetail;
 import com.dietpedia.app.presentation.presenters.DietPresenter;
 import com.dietpedia.app.ui.activities.BaseActivity;
 import com.dietpedia.app.ui.activities.MainActivity;
@@ -30,11 +31,12 @@ public class DietFragment extends Fragment implements DietView {
     public static final String TAG       = "DietFragment";
     public static final String KEY_INDEX = "index";
 
-    @Bind(R.id.fragment_diet_vp)     ViewPager     mViewPager;
-    @Inject                          DietPresenter mPresenter;
+    @Bind(R.id.fragment_diet_vp) ViewPager     mViewPager;
+    @Inject                      DietPresenter mPresenter;
 
-    private Listener mListener;
-    private String   mTitle;
+    private Listener         mListener;
+    private String           mTitle;
+    private DietPagerAdapter mAdapter;
 
     public static DietFragment newInstance(String index) {
         DietFragment fragment = new DietFragment();
@@ -75,20 +77,16 @@ public class DietFragment extends Fragment implements DietView {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mListener.enableCollapsing();
-        // TODO: custom diet images
-        mListener.loadBackdrop(R.drawable.diet1);
+        mListener.loadBackdrop();
 
         setupViewPager(mViewPager);
         ((MainActivity) getActivity()).getTabLayout().setupWithViewPager(mViewPager);
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        DietPagerAdapter adapter = new DietPagerAdapter(getChildFragmentManager());
-        adapter.addFragment(new DietMainFragment(), "INFO");
-        adapter.addFragment(new DietDetailFragment(), "Day 1");
-        adapter.addFragment(new DietDetailFragment(), "Day 2");
-        adapter.addFragment(new DietDetailFragment(), "Day 3");
-        viewPager.setAdapter(adapter);
+        mAdapter = new DietPagerAdapter(getChildFragmentManager());
+        mAdapter.addFragment(new DietMainFragment(), "INFO");
+        viewPager.setAdapter(mAdapter);
     }
 
     // TODO: set title when diet loaded!
@@ -97,7 +95,7 @@ public class DietFragment extends Fragment implements DietView {
     public void onResume() {
         super.onResume();
         // FIXME: 03.07.2016
-        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle("TEST TITLE");
+        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
         ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
         a.setVisibility(View.INVISIBLE);
@@ -110,14 +108,26 @@ public class DietFragment extends Fragment implements DietView {
 
     @Override
     public void showDiet(Diet diet) {
-//        setupViewPager(mViewPager);
+        //        setupViewPager(mViewPager);
 
         mTitle = diet.name();
         ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
+
+        // setup pager etc.
+        if (diet.dietDetails().size() < 2) {
+            ((MainActivity) getActivity()).getTabLayout().setVisibility(View.GONE);
+        } else {
+            for (DietDetail detail : diet.dietDetails()) {
+                ((MainActivity) getActivity()).getTabLayout().setVisibility(View.VISIBLE);
+                mAdapter.addFragment(DietDetailFragment.newInstance(detail), detail.name());
+            }
+            mAdapter.notifyDataSetChanged();
+            ((MainActivity) getActivity()).getTabLayout().setupWithViewPager(mViewPager);
+        }
     }
 
     public interface Listener {
-        void loadBackdrop(int resId);
+        void loadBackdrop();
 
         void enableCollapsing();
     }

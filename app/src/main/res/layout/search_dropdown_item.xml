@@ -7,8 +7,8 @@
     <ImageView
             android:id="@android:id/icon1"
             style="@style/RtlOverlay.Widget.AppCompat.Search.DropDown.Icon1"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
             android:src="@drawable/strawberry_48"

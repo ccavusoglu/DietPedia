@@ -32,7 +32,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
             // TODO: read all from json
             long categoryId = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
                     .name("Shock Diets")
-                    .info("INFO HEREE")
+                    .info("Simple and effective diets")
                     .order(1)
                     .build());
             long dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
@@ -182,21 +182,78 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     .dinner("dinner")
                     .build());
 
+            dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
+                    .name("Diet 3")
+                    .categoryId(categoryId)
+                    .info("INF")
+                    .build());
+
+            db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
+                    .name("All Day")
+                    .dietId(dietId)
+                    .info("INF")
+                    .breakfast("breakfast")
+                    .lunch("lunch")
+                    .dinner("dinner")
+                    .snack1("snack1")
+                    .snack2("snack2")
+                    .snack3("snack3")
+                    .snack4("snack4")
+                    .snack5("snack5")
+                    .snack6("snack6")
+                    .build());
+
+            dietId = db.insert(Db.DietTable.TABLE_NAME, null, new Diet.Builder()
+                    .name("Diet 4")
+                    .categoryId(categoryId)
+                    .info("INF")
+                    .build());
+
+            db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
+                    .name("All Day")
+                    .dietId(dietId)
+                    .info("INF")
+                    .breakfast("breakfast")
+                    .lunch("lunch")
+                    .dinner("dinner")
+                    .snack1("snack1")
+                    .snack2("snack2")
+                    .snack3("snack3")
+                    .snack4("snack4")
+                    .snack5("snack5")
+                    .snack6("snack6")
+                    .build());
+
+            db.insert(Db.DietDetailTable.TABLE_NAME, null, new DietDetail.Builder()
+                    .name("All Day1")
+                    .dietId(dietId)
+                    .info("INF1")
+                    .breakfast("breakfast")
+                    .lunch("lunch")
+                    .dinner("dinner")
+                    .snack1("snack1")
+                    .snack2("snack2")
+                    .snack3("snack3")
+                    .snack4("snack4")
+                    .snack5("snack5")
+                    .snack6("snack6")
+                    .build());
+
             long categoryId1 = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
                     .name("Popular Diets")
-                    .info("INFO HERE")
+                    .info("Most general and well known diets")
                     .order(2)
                     .build());
 
             long categoryId2 = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
-                    .name("Regional Slimming Diets")
-                    .info("INFO HERE")
+                    .name("Slimming Diets")
+                    .info("Get in shape with these popular slimming diets")
                     .order(3)
                     .build());
 
             long categoryId3 = db.insert(Db.CategoryTable.TABLE_NAME, null, new Category.Builder()
                     .name("Custom Diets")
-                    .info("INFO HERE")
+                    .info("Any diet that doesn't fit in other categories")
                     .order(4)
                     .build());
 

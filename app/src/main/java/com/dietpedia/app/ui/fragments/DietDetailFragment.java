@@ -66,7 +66,6 @@ public class DietDetailFragment extends Fragment {
     @DebugLog
     public void onResume() {
         super.onResume();
-        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
         ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
         a.setVisibility(View.INVISIBLE);
@@ -160,11 +159,5 @@ public class DietDetailFragment extends Fragment {
 */
     public void setContent(DietDetail content) {
         mContent = content;
-    }
-
-    public interface Listener {
-        void loadBackdrop(int resId);
-
-        void enableCollapsing();
     }
 }

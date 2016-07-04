@@ -62,7 +62,6 @@ public class DietMainFragment extends Fragment {
     @DebugLog
     public void onResume() {
         super.onResume();
-        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
         ImageView a = ((MainActivity) getActivity()).getToolbarLogo();
         a.setVisibility(View.INVISIBLE);
@@ -77,7 +76,6 @@ public class DietMainFragment extends Fragment {
 //        setupViewPager(mViewPager);
 
         mTitle = diet.name();
-        ((MainActivity) getActivity()).getCollapsingToolbar().setTitle(mTitle);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         int margin = Utils.dpToPx(8);

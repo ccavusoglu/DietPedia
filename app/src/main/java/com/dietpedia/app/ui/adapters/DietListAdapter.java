@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -14,6 +15,7 @@ import com.dietpedia.app.domain.model.Diet;
 import com.dietpedia.app.infrastructure.di.ApplicationContext;
 import com.dietpedia.app.ui.fragments.DietListFragment;
 import com.dietpedia.app.util.Utils;
+import com.squareup.picasso.Picasso;
 import timber.log.Timber;
 
 import javax.inject.Inject;
@@ -26,7 +28,7 @@ import java.util.List;
 public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.DietListViewHolder> {
     @Inject @ApplicationContext Context context;
 
-    private List<Diet> mDiets;
+    private List<Diet>       mDiets;
     private DietListFragment mFragment;
 
     @Inject
@@ -47,7 +49,28 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.DietLi
     @Override
     public void onBindViewHolder(DietListViewHolder holder, int position) {
         Diet diet = mDiets.get(position);
-        //        Picasso.with(context).load("").into(holder.coverImage);
+
+        int resId = 0;
+        // TODO: add resId to model or smth. now, is shittyprogramming!
+        switch ((int) diet.categoryId()) {
+            case 1:
+                resId = R.drawable.cat1;
+                break;
+            case 2:
+                resId = R.drawable.cat2;
+                break;
+            case 3:
+                resId = R.drawable.cat3;
+                break;
+            case 4:
+                resId = R.drawable.cat4;
+                break;
+            default:
+                resId = R.drawable.cat1;
+                break;
+        }
+
+        Picasso.with(context).load(resId).into(holder.imageView);
         holder.titleTextView.setText(diet.name());
         holder.descTextView.setText(diet.info());
     }
@@ -62,8 +85,9 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.DietLi
     }
 
     class DietListViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.cv_diet_title) TextView titleTextView;
-        @Bind(R.id.cv_diet_desc) TextView descTextView;
+        @Bind(R.id.cv_diet_image) ImageView imageView;
+        @Bind(R.id.cv_diet_title) TextView  titleTextView;
+        @Bind(R.id.cv_diet_desc)  TextView  descTextView;
 
         public DietListViewHolder(View itemView) {
             super(itemView);

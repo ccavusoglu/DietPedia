@@ -2,6 +2,7 @@ package com.dietpedia.app.domain.model;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.support.annotation.Nullable;
 import com.dietpedia.app.data.local.Db;
 import com.google.auto.value.AutoValue;
 import rx.functions.Func1;
@@ -69,6 +70,7 @@ public abstract class Diet {
 
     public abstract String name();
 
+    @Nullable
     public abstract String info();
 
     public abstract long categoryId();
